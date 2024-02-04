@@ -1,11 +1,29 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const config = require('./config');
+// const config = require('./config');
 const app = express();
 const routes = require('./routes');
 
-var databaseUrl;
+var devDatabaseUrl;
+var prodDatabaseUrl
+let config;
+
+try {
+  config = require('./config.js');
+  devDatabaseUrl = config.database.dev_connectionString;
+  prodDatabaseUrl = config.database.prod_connectionString;
+} catch (error) {
+  // Handle the case when the file doesn't exist
+  console.error('Error loading config file:', error.message);
+  config = {
+    database: {
+        prod_connectionString: 'nope',
+        dev_connectionString: 'nope',
+      },
+  }; // Provide a default or empty configuration
+}
+
 let env = process.env.NODE_ENV
 env = env.trim();
 if(env === `production`){
