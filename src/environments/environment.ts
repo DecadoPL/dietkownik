@@ -1,4 +1,4 @@
 export const environment = {
   environment: 'development',
-  backendMainUrl: 'http://localhost:3000/'
+  backendMainUrl: 'https://dietkownik-backend-dev.onrender.com/'
 };

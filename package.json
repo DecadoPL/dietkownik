@@ -4,10 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start:frontend": "ng serve",
+    "start:local": "ng serve --configuration=local",
     "start:backend_prod": "set NODE_ENV=production && nodemon server.js",
     "start:backend_dev": "set NODE_ENV=development && nodemon server.js",
     "build:production": "ng build --configuration production",
     "build:development": "ng build"
+    
   },
   "private": true,
   "dependencies": {
