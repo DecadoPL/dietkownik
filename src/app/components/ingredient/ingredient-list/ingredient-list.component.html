@@ -1,0 +1,33 @@
+<div class="component">
+  <app-delete-alert [message]="alertMsg" *ngIf="alert" (deleteCancel)="deleteCancel()" (deleteConfirm)="deleteConfirm()"></app-delete-alert>
+
+  <button type="button" class="button" routerLink="/ingredients/new">Add new</button>
+  <div class="search">
+    <label for="search">Search for:</label>
+    <input type="text" id="search" class="input" [(ngModel)]="searchText" (ngModelChange)="onSearch()">
+  </div>
+  
+
+  <div *ngIf="!$ingredients">
+    <span class="sr-only">Loading...</span> 
+    <br>
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <table *ngIf="$ingredients">
+    <tr *ngFor="let ingredient of ingredientsToDisplay">
+      <td>
+        <app-ingredient-list-item
+        [ingredient]="ingredient"
+        [index]="ingredient._id"
+        ></app-ingredient-list-item>
+      </td>
+      <td>
+        <button class="delete-button" (click)="deleteItem(ingredient._id)">
+        delete
+        </button>
+      </td>
+    </tr>
+  </table>
+
+</div>

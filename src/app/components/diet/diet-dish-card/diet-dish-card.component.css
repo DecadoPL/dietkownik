@@ -1,0 +1,80 @@
+@import '../../../../assets/shared.css';
+
+*{
+  border: 1px solid var(--border-color);
+}
+
+.diet-dish-card {
+  border: 0;
+  border-radius: 25%;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr auto auto;
+  grid-template-areas:
+  "diet-dish-card__name diet-dish-card__name diet-dish-card__name diet-dish-card__name"
+  "diet-dish-card__time diet-dish-card__time diet-dish-card__quantity diet-dish-card__quantity"
+  "diet-dish-card__prot diet-dish-card__carb diet-dish-card__fat diet-dish-card__kcal";
+}
+
+.diet-dish-card > div {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.diet-dish-card__name {
+  display: flex;
+  cursor: pointer;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background: var(--grid-dark-color);
+  color: white;
+  grid-area: diet-dish-card__name;
+  height: 4rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.diet-dish-card__name:hover{
+  background: var(--grid-active-dark-color);
+}
+
+.diet-dish-card__time {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__time;
+}
+
+.diet-dish-card__quantity {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__quantity;
+}
+
+.diet-dish-card__prot {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__prot;
+  border-radius: 0 0 0 var(--border-radius);
+}
+
+.diet-dish-card__carb {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__carb;
+}
+
+.diet-dish-card__fat {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__fat;
+}
+
+.diet-dish-card__kcal {
+  background: var(--grid-light-color);
+  grid-area: diet-dish-card__kcal;
+  border-radius: 0 0 var(--border-radius) 0;
+}
+
+.dish-name {
+  margin: auto;
+  padding: 0.1rem;
+  border: 0;
+}
+

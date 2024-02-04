@@ -1,0 +1,77 @@
+*{
+  border: 1px solid var(--border-color);
+}
+
+.component {
+  border: 0;
+  margin: 0;
+  padding: 0.3rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, auto);
+  grid-template-areas:
+  "name name name name add-dish"
+  "quantity quantity quantity quantity add-dish"
+  "prot carb fat kcal add-dish";
+}
+
+.component > div {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.name {
+  grid-area: name;
+  border-radius: var(--border-radius) 0 0 0;
+  background: var(--grid-dark-color);
+}
+
+.add-dish {
+  grid-area: add-dish;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  background: var(--btn-red-inactive-color);
+}
+
+.delete-button {
+  background: var(--btn-red-inactive-color);
+  border-style: solid;
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  margin: 0.1rem;
+  width: min-content;
+  margin-bottom: auto;
+}
+
+.add-dish:hover {
+  background: var(--btn-red-hover-color);
+}
+
+.quantity {
+  grid-area: quantity;
+  background: var(--grid-light-color);
+}
+
+.prot {
+  grid-area: prot;
+  border-radius: 0 0 0 var(--border-radius);
+  background: var(--grid-light-color);
+}
+
+.carb {
+  grid-area: carb;
+  background: var(--grid-light-color);
+}
+
+.fat {
+  grid-area: fat;
+  background: var(--grid-light-color);
+}
+
+.kcal {
+  grid-area: kcal;
+  background: var(--grid-light-color);
+}

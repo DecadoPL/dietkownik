@@ -1,0 +1,175 @@
+form {
+  display:flex;
+  align-items: top;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.dummy-properties {
+  width: 20vw;
+}
+.main-properties {
+  width: 20vw;
+  padding: 1rem;
+  background: var(--secondary-background-highlighted-color);
+}
+.buttons {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-evenly;
+}
+
+.main-properties__numerical {
+  display:flex;
+  align-items: top;
+  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.other-properties {
+  margin: 2rem;
+  width: 20vw;
+  padding: 1rem;
+}
+
+.macro-container {
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "Proteins-name Carbohydrates-name Fat-name Kcal-name"
+    "proteins carbohydrates fat kcal"; 
+  text-align: center;
+  text-justify: distribute;
+}
+
+.macro-container > div {
+  border: 1px solid var(--border-color);
+  margin:0;
+  padding:0.1rem;
+}
+
+.Proteins-name { 
+  grid-area: Proteins-name;
+  color: white;
+  background: var(--grid-dark-color);
+  border-radius: var(--border-radius) 0 0 0;
+}
+.Carbohydrates-name { 
+  grid-area: Carbohydrates-name;
+  color: white;
+  background: var(--grid-dark-color);
+}
+.Fat-name { 
+  grid-area: Fat-name;
+  color: white;
+  background: var(--grid-dark-color);
+}
+.Kcal-name { 
+  grid-area: Kcal-name;
+  color: white;
+  background: var(--grid-dark-color);
+  border-radius: 0 var(--border-radius) 0 0;
+}
+.proteins { 
+  grid-area: proteins;
+  background: var(--grid-light-color);
+  border-radius: 0 0 0 var(--border-radius);
+}
+.carbohydrates { 
+  grid-area: carbohydrates;
+  background: var(--grid-light-color);
+}
+.fat { 
+  grid-area: fat;
+  background: var(--grid-light-color);
+}
+.kcal { 
+  grid-area: kcal;
+  background: var(--grid-light-color);
+  border-radius: 0 0 var(--border-radius) 0 ;
+}
+
+#quantity{
+  text-align: center;
+  text-justify: distribute;
+}
+
+#portion{
+  text-align: center;
+  text-justify: distribute;
+}
+
+.ingr-container {
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto auto; 
+  grid-template-areas: 
+    "name name name name"
+    "quantity quantity portion portion"
+    "proteins carbohydrates fat kcal"; 
+  text-align: center;
+  text-justify: distribute;
+}
+
+.ingr-container > div {
+  border: 1px solid var(--border-color);
+  margin:0;
+  padding:0.1rem;
+}
+
+.ingr-name { 
+  display: flex;
+  cursor: pointer;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background: var(--grid-dark-color);
+  color: white;
+  grid-area: name;
+  justify-content: center;
+  align-items: center;
+ }
+
+.ingr-name:hover{
+  background: var(--grid-active-dark-color);
+}
+
+.ingr-name span {
+  margin: auto;
+  padding: 0.1rem;
+  border: 0;
+}
+
+.ingr-quantity { 
+  grid-area: quantity;
+  background: var(--grid-light-color);
+}
+.ingr-portion { 
+  grid-area: portion;
+  background: var(--grid-light-color);
+}
+.ingr-proteins { 
+  grid-area: proteins;
+  background: var(--grid-light-color);
+  border-radius: 0 0 0 var(--border-radius);
+}
+.ingr-carbohydrates { 
+  grid-area: carbohydrates;
+  background: var(--grid-light-color);
+}
+.ingr-fat { 
+  grid-area: fat;
+  background: var(--grid-light-color);
+}
+.ingr-kcal { 
+  grid-area: kcal;
+  background: var(--grid-light-color);
+  border-radius: 0 0 var(--border-radius) 0;
+}
+
+textarea {
+  height: fit-content;
+}
+
+

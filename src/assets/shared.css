@@ -1,0 +1,164 @@
+:root {
+--red: #F97575;
+--dark-red: #cb3c3c;
+--light-grey: #F7F9FB;
+--medium-grey: #D8E3EC;
+--darker-grey: #2450B426;
+--light-blue: hsla(207, 90%, 77%, 1);
+--medium-blue: hsla(210, 79%, 46%, 1);
+--dark-blue: #2450B4;
+--green: #1DB954;
+--dark-green: #006241;
+
+--btn-red-inactive-color: var(--red);
+--btn-red-hover-color: var(--dark-red);
+
+--btn-green-inactive-color: var(--green);
+--btn-green-hover-color: var(--dark-green);
+
+--btn-inactive-color: var(--light-grey);
+--btn-hover-color: var(--light-blue);
+
+--border-radius: 0.5rem;
+--thin-border-width: 0.1rem;
+--thick-border-width: 0.15rem;
+--border-color: var(--dark-blue);
+
+--grid-light-color: var(--light-grey);
+--grid-dark-color: var(--medium-blue);
+--grid-active-dark-color: var(--dark-blue);
+
+--card-header-color: var(--medium-blue);
+--card-footer-color: var(--light-blue);
+
+--main-background-color: var(--light-grey);
+--secondary-background-color: var(--medium-grey);
+--secondary-background-highlighted-color: var(--darker-grey);
+--secondary-background-shadow-color: rgba(13, 72, 160, 0.3); 
+
+--input-inactive-color: var(--light-grey);
+--input-focused-color: white;
+--input-hover-color: var(--light-blue);
+--input-invalid-color: var(--dark-red);
+}
+
+.button {
+  border-style: solid;
+  border-width: var(--thick-border-width);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--btn-inactive-color);
+}
+
+.button:hover {
+  background-color: var(--btn-hover-color);
+}
+
+.save-button {
+  border-style: solid;
+  border-width: var(--thick-border-width);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--btn-green-inactive-color);
+}
+
+.save-button:hover {
+  background-color: var(--btn-green-hover-color);
+}
+
+.delete-button {
+  border-style: solid;
+  border-width: var(--thick-border-width);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--btn-red-inactive-color);
+  /* margin: 0.1rem;
+  width: min-content;
+  margin-bottom: auto; */
+}
+
+.delete-button:hover {
+  background: var(--btn-red-hover-color);
+}
+
+.input {
+  display: block;
+  height: 2rem;
+  width: 100%;
+  border-style: solid;
+  border-width: var(--thick-border-width);
+  background-color: var(--input-inactive-color);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.input:hover{
+  background-color: var(--input-hover-color);
+}
+
+.input:focus{
+  background-color: var(--input-focused-color);
+}
+
+.select {
+  display: block;
+  border-style: solid;
+  /* height: 2rem; */
+  width: 100%;
+  border-width: var(--thick-border-width);
+  background-color: var(--input-inactive-color);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+/* .select:hover{
+  background-color: var(--input-hover-color);
+} */
+
+/* .select:focus{
+  background-color: var(--input-focused-color);
+} */
+
+.component {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 1rem; 
+}
+
+.secondary-background {
+  background: var(--secondary-background-color); 
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 0.7rem var(--secondary-background-shadow-color);
+}
+
+.inline {
+  display: inline;
+}
+
+.input--short {
+  width: 5rem;
+  text-align: center;
+}
+
+.input--auto {
+  width: auto;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.image-input {
+  text-align: center;
+} 
+
+img {
+  margin: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+

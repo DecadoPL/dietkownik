@@ -1,0 +1,102 @@
+<app-alert [message]="alertMsg" *ngIf="alert" (cancel)="alertCancel()" (save)="alertSave()" (discard)="alertDiscard()"></app-alert>
+
+<div class="component" >
+<form [formGroup]="dietForm" (ngSubmit)="onSubmit()">
+
+  <div class="formGroup" formGroupName="dietRequirements">
+    <label for="requirements">Diet requirements</label>
+    <select id="requirements" formControlName="dietRequirementsName" class="select" style="width:300px;">
+    <!-- <select id="requirements" formControlName="dietRequirementsName" class="select" style="width:300px;" (change)="dietRequirementsChanged($event)"> -->
+      <option value="">Select requirements</option>
+      <option *ngFor="let requirement of allRequirements" [value]="requirement.dietRequirementsName">
+        {{ requirement.dietRequirementsName}}
+      </option>
+    </select>
+  </div>
+  
+  <div class="formGroup">
+    <label for="dietName">Diet name</label>
+    <input type="text" id="dietName" formControlName="dietName" class="input" style="width:300px;">
+    <span *ngIf="!dietForm.get('dietName')?.valid && dietForm.get('dietName')?.touched" class="text-danger">
+      Please enter a valid name
+    </span>
+  </div>
+
+  <div class="formGroup">
+    <label for="dietDescription">Description</label>
+    <input type="text" id="dietDescription" formControlName="dietDescription" class="input" style="width:300px;">
+    <span *ngIf="!dietForm.get('dietDescription')?.valid && dietForm.get('dietDescription')?.touched" class="text-danger">
+      Please enter a valid description
+    </span>
+  </div>
+
+  <button type="submit" class="form__button button" [disabled]="!requireSave" [hidden]="!requireSave">Save</button>
+
+</form>
+
+<hr>
+
+<div class="days" cdkDropListGroup>
+  <div class="diet__day" *ngFor="let day of this.dietDays.value; let dayId = index">
+    <div class="day__macro">
+      <div class="day__name" *ngIf="dayId==0">
+        {{day.dayName}}
+          <input
+            class="input day__date "
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            [(ngModel)]="date"
+            ngbDatepicker
+            #d="ngbDatepicker"
+            (ngModelChange)="dateSelected()"
+            (click)="d.toggle()"/>
+      </div>
+      <div class="day__name" *ngIf="dayId!=0">{{day.dayName}} {{day.dayDate}}</div>
+      <div class="prot__name">P</div>
+      <div class="carb__name">C</div>
+      <div class="fat__name">F</div>
+      <div class="kcal__name">K</div>
+      <div class="required__name">REQ:</div>
+      <div class="inday__name">InDay</div>
+      <div class="diff__name">DIF:</div>
+      <div class="required__prot">{{this.dietRequirements.value.dietRequirementsProteins}}</div>
+      <div class="required__carb">{{this.dietRequirements.value.dietRequirementsCarbohydrates}}</div>
+      <div class="required__fat">{{this.dietRequirements.value.dietRequirementsFat}}</div>
+      <div class="required__kcal">{{this.dietRequirements.value.dietRequirementsKcal}}</div>
+      <div class="inday__prot">{{this.inDay[dayId].proteins}}</div>
+      <div class="inday__carb">{{this.inDay[dayId].carbohydrates}}</div>
+      <div class="inday__fat">{{this.inDay[dayId].fat}}</div>
+      <div class="inday__kcal">{{this.inDay[dayId].kcal}}</div>
+      <div class="diff__prot">{{this.difference[dayId].proteins}}</div>
+      <div class="diff__carb">{{this.difference[dayId].carbohydrates}}</div>
+      <div class="diff__fat">{{this.difference[dayId].fat}}</div>
+      <div class="diff__kcal">{{this.difference[dayId].kcal}}</div>
+    </div>
+    
+    <div class="day__slot"
+      *ngFor="let hour of mealsTime.value; let dishIndex = index"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [id]="dayId+'-'+dishIndex">
+        <button [id]="'d'+dayId+'-'+dishIndex" class="slot__button button" 
+          (click)="showInputs[dayId + '-' + dishIndex] = true"
+          *ngIf="!showInputs[dayId + '-' + dishIndex] && !day.dayDishes[dishIndex]">
+          add dish at {{hour}}
+        </button>  
+        <app-diet-dishes-tray *ngIf="showInputs[dayId + '-' + dishIndex]" 
+          (cancel)="showInputs[dayId + '-' + dishIndex] = false"
+          (dishSelected)="addDish(dayId, dishIndex, $event); showInputs[dayId + '-' + dishIndex] = false"
+          [unusedDishes]="unusedDishes">
+        </app-diet-dishes-tray>
+        <app-diet-dish-card cdkDrag *ngIf="day.dayDishes[dishIndex]"
+          class = "slot__card"
+          [dish] = "day.dayDishes[dishIndex]"
+          [dishId] = "day.dayDishes[dishIndex]._id"
+          [dayId] = "dayId"
+          [dishIndex] = "dishIndex"
+          (deleteCard) = "deleteDish($event); showInputs[dayId + '-' + dishIndex] = false">
+        </app-diet-dish-card>
+    </div>
+  </div>
+</div>
+</div>

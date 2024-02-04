@@ -1,0 +1,70 @@
+<div class="component">
+
+  <app-alert [message]="alertMsg" *ngIf="alert" (cancel)="alertCancel()" (save)="alertSave()" (discard)="alertDiscard()"></app-alert>
+  
+  <form [formGroup]="ingredientForm" (keydown.enter)="$event.preventDefault()" (ngSubmit)="onSubmit()">
+
+    <!-- <div class="dummy-properties"></div> -->
+
+    <div class="main-properties secondary-background">
+      <div class="buttons">
+        <button type="button" class="button" (click)="goUpOneLevel()">Back</button>
+        <p *ngIf="newIngredientFlag">New Ingredient</p>
+        <p *ngIf="!newIngredientFlag">Update Ingredient</p>
+        <button type="submit" class="button"  [disabled]="!requireSave">Save</button>
+      </div>
+      
+      <hr>
+      <label for="name">Ingredient name</label>
+      <input type="text" id="ingrName" formControlName="ingrName" class="input" [class.input-valid]="ingredientForm.get('name')?.invalid">
+
+      <div class="main-properties__macro">
+        <div class="div1"><label for="ingrProteins">Prot</label></div>
+        <div class="div5">
+          <input type="number" id="ingrProteins" formControlName="ingrProteins" class="input input--short" [class.input-valid]="ingredientForm.get('proteins')?.invalid" >
+        </div>
+        <div class="div2"><label for="ingrCarbohydrates">Carb</label></div>
+        <div class="div6">
+          <input type="number" id="ingrCarbohydrates" formControlName="ingrCarbohydrates" class="input input--short" [class.input-valid]="ingredientForm.get('carbohydrates')?.invalid">
+        </div>
+        <div class="div3"><label for="ingrFat">Fat</label></div>
+        <div class="div7">
+          <input type="number" id="ingrFat" formControlName="ingrFat" class="input input--short" [class.input-valid]="ingredientForm.get('fat')?.invalid">
+        </div>
+        <div class="div4"><label>Kcal</label></div>
+        <div class="div8">
+          <input type="number" id="ingrKcal" formControlName="ingrKcal" class="input input--short" readonly>
+        </div>
+      </div>
+      <hr>
+      
+      <div formGroupName="newPortion">
+        <label for="portionName" class="inline">Add portion: </label>
+        <select id="portionName" formControlName="name" class="select input--short inline">
+          <option *ngFor="let pt of $portionNames" [value]="pt.portionName">
+            {{ pt.portionName }}
+          </option>
+        </select>
+        <label for="weight" class="inline"> weight: </label>
+        <input type="number" id="weight" formControlName="weight" class="input input--short inline"  (keydown.enter)="newPortionEnter()">
+        <label for="weight" class="inline">g </label>
+        <button type="button" class="button" (click)="newPortionEnter()">Add</button>
+      </div>
+      
+      <hr>
+
+      <p>List of assigned portions:</p>
+
+      <div class="assigned-portions"  *ngFor="let ingrPortion of ingrPortions.controls; let i=index" formArrayName="ingrPortions">
+        <ng-container [formGroupName]="i">
+          <label [for]='"portionsListItem" + i'>{{i+1}}. Portion: {{this.ingrPortion.get('ingrPortionName')?.value}} weight: </label>
+          <input [id]='"portionsListItem" + i' type="number" formControlName="ingrPortionWeight" class="input input--short inline" [attr.readonly]="i === 0 ? true : null">
+          <label [for]='"portionsListItem" + i' class="inline">g</label>
+        </ng-container>
+      </div>
+
+    </div>
+
+
+  </form>
+</div>

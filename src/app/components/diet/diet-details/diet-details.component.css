@@ -1,0 +1,182 @@
+@import '../../../../assets/shared.css';
+
+form {
+  display:inline-block;
+}
+
+.formGroup {
+  display:inline-block;
+  vertical-align: middle;
+  margin:0 1rem;
+}
+
+.day__name div {
+  width:fit-content;
+  padding:0 1rem;
+  color: black;
+  background-color: var(--input-inactive-color);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.day__date {
+  display:inline-block;
+  width: 7rem;
+  height:1.5rem;
+}
+
+
+.form__button {
+  vertical-align: middle;
+  height: 2rem;
+  margin: auto 5rem;
+}
+
+.days {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.diet__day {
+   background: var(--secondary-background-color); 
+  border-radius: var(--border-radius);
+  margin: 0.1rem auto;
+  min-width: 12vw;
+  max-width: 13vw;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-shadow: 0 0 0.7rem var(--secondary-background-shadow-color);
+}
+
+.day__macro {
+  background: var(--grid-active-dark-color); 
+  color: white;
+  margin: 0.5rem 0.3rem;
+  padding: 1rem;
+  border: 1px var(--border-color) solid;
+  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-auto-flow: row;
+  grid-template-areas:
+    "day__name day__name day__name day__name day__name"
+    ". prot__name carb__name fat__name kcal__name"
+    "required__name required__prot required__carb required__fat required__kcal"
+    "inday__name inday__prot inday__carb inday__fat inday__kcal"
+    "diff__name diff__prot diff__carb diff__fat diff__kcal";
+}
+
+.day__macro > div {
+  text-align: center;
+}
+
+.day__macro .required__name,
+.day__macro .inday__name,
+.day__macro .diff__name { 
+  text-align: right; 
+}
+
+.day__name { 
+  grid-area: day__name;
+}
+
+.day__date { 
+  grid-area: day__date;
+}
+
+.prot__name { 
+  grid-area: prot__name;
+}
+
+.carb__name { 
+  grid-area: carb__name; 
+}
+
+.fat__name { 
+  grid-area: fat__name; 
+}
+
+.kcal__name { 
+  grid-area: kcal__name; 
+}
+
+.required__name { 
+  grid-area: required__name; 
+}
+
+.inday__name { 
+  grid-area: inday__name;
+}
+
+.diff__name { 
+  grid-area: diff__name;
+}
+
+.required__prot { 
+  grid-area: required__prot; 
+}
+
+.required__carb { 
+  grid-area: required__carb; 
+}
+
+.required__fat { 
+  grid-area: required__fat; 
+}
+
+.required__kcal { 
+  grid-area: required__kcal; 
+}
+
+.inday__prot { 
+  grid-area: inday__prot; 
+}
+
+.inday__carb { 
+  grid-area: inday__carb; 
+}
+
+.inday__fat { 
+  grid-area: inday__fat; 
+}
+
+.inday__kcal { 
+  grid-area: inday__kcal; 
+}
+
+.diff__prot { 
+  grid-area: diff__prot; 
+}
+
+.diff__carb { 
+  grid-area: diff__carb; 
+}
+
+.diff__fat { 
+  grid-area: diff__fat; 
+}
+
+.diff__kcal { 
+  grid-area: diff__kcal; 
+}
+
+.day__slot{
+  width: 100%;
+  display: flex;
+}
+
+.slot__button {
+  margin: 2rem auto;
+}
+
+.slot__card {
+  margin: 0.5rem 0.3rem;
+  width: 100%;
+}
+
+
+

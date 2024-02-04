@@ -1,0 +1,14 @@
+  <div class="diet-dish-card">
+    
+    <div class="diet-dish-card__name" [routerLink]="[dayId, dish.dishId]">
+      <span class="dish-name">{{ dish.dishName }}</span>
+      <button class="delete-button" (click)="deleteCard.emit([dishIndex, dayId])">X</button>
+    </div>
+    <div class="diet-dish-card__time">{{dish.dietDishTime}}</div>
+    <div class="diet-dish-card__quantity">Portions: {{dish.dietDishQuantity}}/{{dish.dishPortions}}</div>
+    <div class="diet-dish-card__prot">P<br>{{dish.dietDishProteins}}</div>
+    <div class="diet-dish-card__carb">C<br>{{dish.dietDishCarbohydrates}}</div>
+    <div class="diet-dish-card__fat">F<br>{{dish.dietDishFat}}</div>
+    <div class="diet-dish-card__kcal">K<br>{{dish.dietDishKcal}}</div>
+
+  </div>

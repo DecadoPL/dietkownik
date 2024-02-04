@@ -1,0 +1,68 @@
+<div class="component">
+
+  <app-alert [message]="alertMsg" *ngIf="alert" (cancel)="alertCancel()" (save)="alertSave()" (discard)="alertDiscard()"></app-alert>
+  
+  <form [formGroup]="dietRequirementsForm" (ngSubmit)="onSubmit($event)" (keydown.enter)="$event.preventDefault()">
+
+    <div class="main-properties secondary-background">
+          
+      <div class="buttons">
+        <button type="button" class="button" (click)="goUpOneLevel()">Back</button>
+        <p *ngIf="newDietRequirementsFlag">New Dish</p>
+        <p *ngIf="!newDietRequirementsFlag">Update Dish</p>
+        <button type="submit" class="button"  [disabled]="!requireSave">Save</button>
+      </div>
+      <hr>
+
+      <div class="formGroup">
+        <label for="dietRequirementsName"> Diet Requirements name</label>
+        <input type="text" id="dietRequirementsName" formControlName="dietRequirementsName" class="input">
+        <span *ngIf="!dietRequirementsForm.get('dietRequirementsName')?.valid && dietRequirementsForm.get('dietRequirementsName')?.touched" class="text-danger">
+          Please enter a valid  Diet Requirements name
+        </span>
+      </div>
+
+      <div class="macro">
+        <div class="formGroup">
+          <label>Kcal: </label>
+          <input type="number" id="dietRequirementsKcal" formControlName="dietRequirementsKcal" class="input input--short" readonly>
+        </div>
+  
+        <div class="formGroup">
+          <label for="dietRequirementsProteins">Proteins</label>
+          <input type="number" id="dietRequirementsProteins" formControlName="dietRequirementsProteins" class="input input--short">
+          <span *ngIf="!dietRequirementsForm.get('dietRequirementsProteins')?.valid && dietRequirementsForm.get('dietRequirementsProteins')?.touched" class="text-danger">
+            Please enter a valid number from range 0 - 1000
+          </span>
+        </div>
+  
+        <div class="formGroup">
+          <label for="dietRequirementsCarbohydrates">Carb.</label>
+          <input type="number" id="dietRequirementsCarbohydrates" formControlName="dietRequirementsCarbohydrates" class="input input--short">
+          <span *ngIf="!dietRequirementsForm.get('dietRequirementsCarbohydrates')?.valid && dietRequirementsForm.get('dietRequirementsCarbohydrates')?.touched" class="text-danger">
+            Please enter a valid number from range 0 - 1000
+          </span>
+        </div>
+  
+        <div class="formGroup">
+          <label for="dietRequirementsFat">Fat</label>
+          <input type="number" id="dietRequirementsFat" formControlName="dietRequirementsFat" class="input input--short">
+          <span *ngIf="!dietRequirementsForm.get('dietRequirementsFat')?.valid && dietRequirementsForm.get('dietRequirementsFat')?.touched" class="text-danger">
+            Please enter a valid number from range 0 - 1000
+          </span>
+        </div>
+      </div>
+    
+      <label>Add dish hour: </label>
+      <input type="text" (keydown.enter)="newHour($event)" class="input input--short inline">
+
+      <div class="hours-list" formArrayName="dietRequirementsMealsTime">
+        <div *ngFor="let hour of dietRequirementsMealsTime.controls; let i = index">
+          <input type="text" [value]="hour.value"  (keyup.enter)="updateHour($event, i)" class="input input--short">
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+E

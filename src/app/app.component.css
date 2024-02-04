@@ -1,0 +1,19 @@
+.cont {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Set container height to fill the viewport */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.content {
+  padding: 20px;
+  padding-top: 3rem;
+  vertical-align: middle;
+}

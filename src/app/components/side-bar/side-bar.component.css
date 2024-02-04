@@ -1,0 +1,10 @@
+@import '../../../assets/shared.css';
+
+.bg-light {
+  /* background: var(--cobalt-blue)!important; */
+  background: #2450B4!important;
+}
+
+a {
+  color: white!important;
+}

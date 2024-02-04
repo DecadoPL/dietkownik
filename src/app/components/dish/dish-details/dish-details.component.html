@@ -1,0 +1,119 @@
+<div class="component">
+
+  <app-alert [message]="alertMsg" *ngIf="alert" (cancel)="alertCancel()" (save)="alertSave()" (discard)="alertDiscard()"></app-alert>
+ 
+  <form [formGroup]="dishForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+
+    <div class="dummy-properties"></div>
+
+    <div class="main-properties secondary-background">
+      <div class="buttons">
+        <button type="button" class="button" (click)="goUpOneLevel()">Back</button>
+        <p *ngIf="newDishFlag">New Dish</p>
+        <p *ngIf="!newDishFlag">Update Dish</p>
+        <button type="submit" class="button"  [disabled]="!requireSave">Save</button>
+      </div>
+      <hr>
+      <div class="formGroup">
+        <label for="dishName">Dish name</label>
+        <input type="text" id="dishName" formControlName="dishName" class="input" >
+        <span *ngIf="!dishForm.get('dishName')?.valid && dishForm.get('dishName')?.touched" class="text-danger">
+          Please enter a valid ingredient name
+        </span>
+      </div>
+
+      <div class="formGroup">
+        <label for="dishRecipe">Recipe</label>
+        <textarea id="dishRecipe" formControlName="dishRecipe" class="input"></textarea>
+        <span *ngIf="!dishForm.get('dishRecipe')?.valid && dishForm.get('dishRecipe')?.touched" class="text-danger">
+          Please enter a valid dish recipe
+        </span>
+      </div>
+      <div class="formGroup">
+        <label for="dishPortions">Portions</label>
+        <input type="text" id="dishPortions" formControlName="dishPortions" class="input input--short" >
+        <span *ngIf="!dishForm.get('dishPortions')?.valid && dishForm.get('dishPortions')?.touched" class="text-danger">
+          Please enter a valid dish type
+        </span>
+      </div>
+
+      <p>Macro in portion</p>
+      <div class="macro-container">
+        <div class="Proteins-name">Prot</div>
+        <div class="Carbohydrates-name">Carb</div>
+        <div class="Fat-name">Fat</div>
+        <div class="Kcal-name">Kcal</div>
+        <div class="proteins">{{this.dishForm.get('dishProteinsPerPortion')?.value}} </div>
+        <div class="carbohydrates">{{this.dishForm.get('dishCarbohydratesPerPortion')?.value}}</div>
+        <div class="fat">{{this.dishForm.get('dishFatPerPortion')?.value}} </div> 
+        <div class="kcal">{{this.dishForm.get('dishKcalPerPortion')?.value}}</div>
+      </div>
+
+      <p>Macro total</p>
+      <div class="macro-container">
+        <div class="Proteins-name">Prot</div>
+        <div class="Carbohydrates-name">Carb</div>
+        <div class="Fat-name">Fat</div>
+        <div class="Kcal-name">Kcal</div>
+        <div class="proteins">{{(this.dishForm.get('dishProteinsPerPortion')?.value*dishForm.get('dishPortions')?.value).toFixed(2).toString()}} </div>
+        <div class="carbohydrates">{{(this.dishForm.get('dishCarbohydratesPerPortion')?.value*dishForm.get('dishPortions')?.value).toFixed(2).toString()}}</div>
+        <div class="fat">{{(this.dishForm.get('dishFatPerPortion')?.value*dishForm.get('dishPortions')?.value).toFixed(2).toString()}} </div> 
+        <div class="kcal">{{(this.dishForm.get('dishKcalPerPortion')?.value*dishForm.get('dishPortions')?.value).toFixed(2).toString()}}</div>
+      </div>
+    </div>
+
+    <div class="other-properties secondary-background">
+      <p>Ingredients</p>
+
+      <input
+        id="ingredientSearchInput"
+        type="text"
+        class="input"
+        [(ngModel)]="newIngr"
+        [ngModelOptions]="{standalone: true}"
+        [ngbTypeahead]="search"
+        [inputFormatter]="formatter"
+        [resultFormatter]="formatter"
+        [editable]="false" 
+        (ngModelChange)="addIngredient()" 
+      />
+      <hr>      
+
+      <div class="ingr-container" *ngFor="let ingredient of dishIngredients.controls; let ingrIndex=index" formArrayName="dishIngredients">
+        <ng-container [formGroupName]="ingrIndex">
+          <div class="ingr-name"> 
+            <span>{{this.ingredient.get('ingrName')?.value}}</span>
+            <button class="delete-button" (click)="removeIngredient(ingrIndex)">X</button>
+          </div>
+          <div class="ingr-quantity"> 
+            <label for="dishIngrQuantity" class="inline">Quantity: </label>
+            <input id="dishIngrQuantity" class="input input--short inline" type="number" formControlName="dishIngrQuantity" [step]="dishIngrQuantityStep">
+          </div>
+          <div class="ingr-portion"> 
+            <label for="ingrPortions" class="inline">Portion: </label>
+              <select  id="ingrPortions" formArrayName="ingrPortions" class="select input--auto inline" (change)="changeSelectedPortion(ingrIndex, $event)">    
+                <option *ngFor="let portion of getIngrPortions(ingrIndex).value">
+                  {{ portion.ingrPortionName }}: {{portion.ingrPortionWeight}}g
+                </option>
+              </select> 
+          </div>
+          <div class="ingr-proteins"> 
+            P: {{(+this.ingredient.get('ingrProteins')?.value).toFixed(2).toString()}}
+          </div>
+          <div class="ingr-carbohydrates"> 
+            C: {{(+this.ingredient.get('ingrCarbohydrates')?.value).toFixed(2).toString()}}
+          </div>
+          <div class="ingr-fat"> 
+            F: {{(+this.ingredient.get('ingrFat')?.value).toFixed(2).toString()}}
+          </div>
+          <div class="ingr-kcal"> 
+            K: {{(+this.ingredient.get('ingrKcal')?.value).toFixed(2).toString()}}
+          </div>
+        </ng-container>
+        <br>
+      </div>
+    </div>
+
+  </form>
+</div>
+

@@ -1,0 +1,38 @@
+<div class="component">
+  <app-delete-alert [message]="alertMsg" *ngIf="alert" (deleteCancel)="deleteCancel()" (deleteConfirm)="deleteConfirm()"></app-delete-alert>
+
+  <button type="button" class="button" routerLink="/dishes/new">Add new</button>
+  <div class="search">
+    <label for="search">Search for:</label>
+    <input type="text" id="search" class="input" [(ngModel)]="searchText" (ngModelChange)="onSearch()">
+  </div>
+  
+  <hr>
+  <div *ngIf="!$dishes">
+    <span class="sr-only">Loading...</span> 
+    <br>
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <table *ngIf="$dishes">
+    <tr *ngFor="let dish of dishesToDisplay">
+      <td>
+        <app-dish-list-item
+        [dish]="dish"
+        [index]="dish._id"
+        ></app-dish-list-item>
+      </td>
+      <td>
+        <button class="delete-button" (click)="deleteItem(dish._id)">delete</button>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+
+
+
+
+

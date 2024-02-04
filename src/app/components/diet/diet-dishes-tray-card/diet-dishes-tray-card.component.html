@@ -1,0 +1,11 @@
+<div class="component">
+  
+  <div class="name">{{unusedDish.dish.dishName}}</div>
+  <div class="quantity">Portions left: {{portionsLeft}}</div>
+  <div class="add-dish" (click)="addDishFromUnused.emit(unusedDish.dish)">ADD</div>
+  <div class="prot">P: {{unusedDish.dish.dishProteinsPerPortion}}</div>
+  <div class="carb">C: {{unusedDish.dish.dishCarbohydratesPerPortion}}</div>
+  <div class="fat">F: {{unusedDish.dish.dishFatPerPortion}}</div>
+  <div class="kcal">K: {{unusedDish.dish.dishKcalPerPortion}}</div>
+
+</div>

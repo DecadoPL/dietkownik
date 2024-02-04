@@ -1,0 +1,9 @@
+<div class="component">
+  <label>New portion type</label>
+  <input type="text" (keydown.enter)="newPortionName($event)" class="input" style="width:300px;">
+  List of portion types(press enter after editing to save changes)
+  <div *ngFor="let pt of allPortionNames">
+    <input type="text" [value]="pt.portionName" (keyup.enter)="updatePortionName($event, pt)" class="input" style="width:300px;">
+  </div>
+
+</div>
