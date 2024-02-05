@@ -200,7 +200,7 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
         if(params['dietId']!=undefined){
           this.dietService.getDietMONGO(params['dietId']).subscribe(
             (dietFetched: DietMONGO) => {
-              console.log("dietFetched", dietFetched)
+              // console.log("dietFetched", dietFetched)
               this.dietForm.patchValue({
                 _id: dietFetched._id,
                 dietName: dietFetched.dietName,
@@ -212,7 +212,7 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
                 this.addDietDay(dietDay)
               })
 
-              console.log("dietFetched this.dietForm.value", this.dietForm.value)
+              // console.log("dietFetched this.dietForm.value", this.dietForm.value)
             }
           )
           // this.dietService.getDiet(+params['dietId']).subscribe(
@@ -426,19 +426,19 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
   onSubmit(){
 
     if(this.isFormValid == true){
-      console.log("onSubmit dietForm.value", this.dietForm.value);
+      // console.log("onSubmit dietForm.value", this.dietForm.value);
       this.dietService.saveDietMONGO(this.dietForm.value)
       .subscribe( {
         next: (response) => {
           this.toastrService.success(response.message, 'SUCCESS');
-          // this.requireSave = false;
+          this.requireSave = false;
         },
         error: (error) => {
           let errMessage = error.toString();
           this.toastrService.error(errMessage.replace("Error: ", ""), "ERROR");
         }
       });
-      //  this.requireSave = true;
+       this.requireSave = true;
 
       //this.router.navigate(['dishes']);
     }

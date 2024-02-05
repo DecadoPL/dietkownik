@@ -190,7 +190,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
 
   onSubmit(){
     if(this.isFormValid == true){
-      console.log("onSubmit dishForm.value", this.dishForm.value);
       this.dishService.saveDishMONGO(this.dishForm.value)
       .subscribe( {
         next: (response) => {
@@ -293,8 +292,13 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
   newIngredient(ingr: DishIngredientMONGO): FormGroup {
     const newIngr = this.fb.group({
       _id: ingr._id || undefined,
-      dishIngrPortion: ingr.dishIngrPortion,
-      dishIngrQuantity: [ingr.dishIngrQuantity, [Validators.required, Validators.min(0), Validators.max(100000)]],
+      dishIngrPortion: this.fb.group({
+        _id: ingr.dishIngrPortion._id,
+        ingrPortionNameId: ingr.dishIngrPortion.ingrPortionNameId,
+        ingrPortionName: ingr.dishIngrPortion.ingrPortionName,
+        ingrPortionWeight: ingr.dishIngrPortion.ingrPortionWeight
+      }),
+      dishIngrQuantity: [ingr.dishIngrQuantity, [Validators.min(0), Validators.max(100000)]],
       ingrId: ingr.ingrId,
       ingrName: ingr.ingrName,
       ingrProteins: ingr.ingrProteins,
@@ -310,6 +314,8 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
     return newIngr;
   }
  
+  
+
   addIngredient(ingr?: DishIngredientMONGO) {
     if(this.newIngr != undefined){//jeżeli dodajemy ingredient ręcznie
       this.ingredientService.getIngredientMONGO(this.newIngr._id).subscribe(
@@ -343,7 +349,7 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
           })
           this.calculateDishMacro();
        })
-    } else { //dodawanie ingr pobranego z bazy danych przy zaciąganiu dania
+    } else if(ingr) { //dodawanie ingr pobranego z bazy danych przy zaciąganiu dania
       let dishIngr: DishIngredientMONGO = ({
         _id:  undefined,
         dishIngrPortion: ingr!.dishIngrPortion,

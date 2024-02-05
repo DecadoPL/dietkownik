@@ -89,14 +89,20 @@
             <label for="dishIngrQuantity" class="inline">Quantity: </label>
             <input id="dishIngrQuantity" class="input input--short inline" type="number" formControlName="dishIngrQuantity" [step]="dishIngrQuantityStep">
           </div>
-          <div class="ingr-portion"> 
+
+
+
+          <div class="ingr-portion" formGroupName="dishIngrPortion"> 
             <label for="ingrPortions" class="inline">Portion: </label>
-              <select  id="ingrPortions" formArrayName="ingrPortions" class="select input--auto inline" (change)="changeSelectedPortion(ingrIndex, $event)">    
-                <option *ngFor="let portion of getIngrPortions(ingrIndex).value">
+              <select  id="ingrPortions" formControlName="ingrPortionName" class="select input--auto inline" (change)="changeSelectedPortion(ingrIndex, $event)">    
+                <option *ngFor="let portion of getIngrPortions(ingrIndex).value" [value]="portion.ingrPortionName">
                   {{ portion.ingrPortionName }}: {{portion.ingrPortionWeight}}g
                 </option>
               </select> 
           </div>
+
+
+
           <div class="ingr-proteins"> 
             P: {{(+this.ingredient.get('ingrProteins')?.value).toFixed(2).toString()}}
           </div>

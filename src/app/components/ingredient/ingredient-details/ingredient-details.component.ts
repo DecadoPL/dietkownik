@@ -34,6 +34,21 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
 
   ngOnInit(){
 
+    this.ingredientForm = this.fb.group({
+      _id: undefined,
+      ingrName: [undefined, Validators.required],
+      ingrProteins: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      ingrCarbohydrates: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      ingrFat: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      ingrKcal: 0,//{value: 0, disabled: true},
+      newPortion: this.fb.group({
+        nameId: [],
+        name: [],
+        weight: []
+      }),
+      ingrPortions: this.fb.array([]), 
+    });
+
     this.portionNameService.getPortionNamesMONGO().subscribe(
       (portionNames) => {
         this.$portionNames = portionNames;
@@ -52,27 +67,12 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
       }
     )
 
-    this.ingredientForm = this.fb.group({
-      _id: undefined,
-      ingrName: [undefined, Validators.required],
-      ingrProteins: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
-      ingrCarbohydrates: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
-      ingrFat: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
-      ingrKcal: 0,//{value: 0, disabled: true},
-      newPortion: this.fb.group({
-        nameId: [],
-        name: [],
-        weight: []
-      }),
-      ingrPortions: this.fb.array([]), 
-    });
-
     this.route.params.subscribe(
       (params: Params) => {
-
         if(params['id']!=undefined){
           this.ingredientService.getIngredientMONGO(params['id']).subscribe(
             (ingredientFetched: IngredientMONGO) => {
+              console.log(ingredientFetched)
               this.newIngredientFlag = false;
               this.ingredientForm.patchValue({
                 _id: ingredientFetched._id,
@@ -85,8 +85,7 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
 
               if(ingredientFetched.ingrPortions){
                 ingredientFetched.ingrPortions.forEach(portion => {
-                  let portionName = this.$portionNames.find(x=>x._id == portion.ingrPortionNameId)?.portionName
-                  this.ingrPortions.push(this.newPortion(new PortionMONGO(undefined, portion.ingrPortionNameId, portionName!, portion.ingrPortionWeight)));
+                  this.ingrPortions.push(this.newPortion(new PortionMONGO(portion._id, portion.ingrPortionNameId, portion.ingrPortionName, portion.ingrPortionWeight)));
                 })
               }
 
@@ -95,12 +94,12 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
           )
           this.requireSave = false;
         }else{
+          
           this.newIngredientFlag = true;
           this.subscriptions();
         }
       }
-    ) 
-    
+    )  
   }
 
   get ingrPortions() : FormArray {

@@ -6,7 +6,6 @@
   <div class="formGroup" formGroupName="dietRequirements">
     <label for="requirements">Diet requirements</label>
     <select id="requirements" formControlName="dietRequirementsName" class="select" style="width:300px;">
-    <!-- <select id="requirements" formControlName="dietRequirementsName" class="select" style="width:300px;" (change)="dietRequirementsChanged($event)"> -->
       <option value="">Select requirements</option>
       <option *ngFor="let requirement of allRequirements" [value]="requirement.dietRequirementsName">
         {{ requirement.dietRequirementsName}}

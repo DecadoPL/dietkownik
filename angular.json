@@ -99,9 +99,7 @@
               "browserTarget": "Dietkownik:build:local"
             }
           },
-          "options": {
-            "allowedHosts": ["0.0.0.0", "https://dietkownik.onrender.com/"]
-          },
+
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
