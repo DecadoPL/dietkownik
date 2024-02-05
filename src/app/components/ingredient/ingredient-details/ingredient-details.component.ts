@@ -72,7 +72,7 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
         if(params['id']!=undefined){
           this.ingredientService.getIngredientMONGO(params['id']).subscribe(
             (ingredientFetched: IngredientMONGO) => {
-              console.log(ingredientFetched)
+              // console.log(ingredientFetched)
               this.newIngredientFlag = false;
               this.ingredientForm.patchValue({
                 _id: ingredientFetched._id,
