@@ -93,7 +93,9 @@
           [dishId] = "day.dayDishes[dishIndex]._id"
           [dayId] = "dayId"
           [dishIndex] = "dishIndex"
-          (deleteCard) = "deleteDish($event); showInputs[dayId + '-' + dishIndex] = false">
+          (deleteCard) = "deleteDish($event); showInputs[dayId + '-' + dishIndex] = false"
+          (increaseDishPortion) = "increaseDishPortion($event)"
+          (decreaseDishPortion) = "decreaseDishPortion($event)">
         </app-diet-dish-card>
     </div>
   </div>

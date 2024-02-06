@@ -57,7 +57,6 @@ export class DietRequirementsListComponent implements OnInit {
           return a.dietRequirementsName.localeCompare(b.dietRequirementsName);
         });
         this.dietRequirementsToDisplay = this.$dietRequirementsList;
-        console.log("DR", this.dietRequirementsToDisplay)
       }
     );
   }

@@ -14,6 +14,7 @@ import { DishMONGO } from 'src/app/models/dish/dishMONGO.model';
 import { ToastrService } from 'ngx-toastr';
 import { DietMONGO } from 'src/app/models/diet/dietMONGO.model';
 import { UnusedDish } from 'src/app/models/diet/unusedDish.model';
+import { DishService } from 'src/app/services/dish.service';
 
 const today = new Date();
 
@@ -66,7 +67,8 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
               private fb:FormBuilder,
               private dietRequirementsService: DietRequirementsService,
               private ngbDateParserFormatter: NgbDateParserFormatter,
-              private toastrService: ToastrService
+              private toastrService: ToastrService,
+              private dishService: DishService
               ){}
 
   convertToDateStruct(dateString: string): NgbDateStruct | null {
@@ -78,7 +80,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     return parsedDate ?? null;
   }
  
-
   get dietDays() : FormArray {
     return this.dietForm.get('dietDays') as FormArray;
   }
@@ -110,7 +111,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     this.dietDays.push(newDietDay);
   }
 
-
   getDayDishes(fg: FormGroup) : FormArray {
     return fg.get('dayDishes') as FormArray;
   }
@@ -129,14 +129,12 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
       dietDishKcal: newDayDish.dietDishKcal, 
     })
   }
-  // dietRequirementsChanged($event: any){
+
   dietRequirementsChanged(dietRequirementsName: string){
-    // const selectedDietRequirementsName = $event.target.value;
     const selectedDietRequirementsName = dietRequirementsName
     if(selectedDietRequirementsName != ""){
       const selectedDietRequirementsId = this.allRequirements.find(x => x.dietRequirementsName === selectedDietRequirementsName)!._id;
       this.dietRequirementsService.getDietRequirementsMONGO(selectedDietRequirementsId).subscribe(fetchedDietRequirements => {
-
         const newDietRequirements = this.fb.group({
           _id: fetchedDietRequirements._id,
           dietRequirementsName: fetchedDietRequirements.dietRequirementsName,
@@ -146,15 +144,12 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
           dietRequirementsKcal: fetchedDietRequirements.dietRequirementsKcal,
           dietRequirementsMealsTime: this.fb.array([])
         })
-
         const mealTimes = this.dietForm.get('dietRequirements')?.get('dietRequirementsMealsTime') as FormArray;
         mealTimes.clear({emitEvent: false});
-
         fetchedDietRequirements.dietRequirementsMealsTime.forEach(mealTime => {
           mealTimes.push(this.fb.control(mealTime), {emitEvent: false});
           
         })
-
         this.dietForm.get('dietRequirements')?.patchValue(newDietRequirements.value, { emitEvent: false });
         //ten kawałek kodu dodaje puste kontrolki do formularza po to, żeby adddish dodawało dania w konkretne sloty. 
         this.dietDays.controls.forEach((dietDay) => {    
@@ -163,7 +158,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
             dayDishes.push(this.fb.control(undefined))
           }
         })
-
       })
     }
   }
@@ -188,128 +182,49 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     this.dietRequirementsService.getDietRequirementsListMONGO().subscribe(
       (fetchedDietRequirements) => {
         this.allRequirements = fetchedDietRequirements;
+
+        //*************************************************** */
+        //*************************************************** */
+        //niekoniecznie chcę to tutaj ale taki szybki fix tego że nie zawsze ładowały się dni bo nie było wszystkich req.
+        //*************************************************** */
+        this.dietRequirements.valueChanges.subscribe((dietRequirements) => {
+          this.dietRequirementsChanged(dietRequirements.dietRequirementsName);
+        })
+    
+        this.route.params.subscribe(
+          (params: Params) => {
+            if(params['dietId']!=undefined){
+              this.dietService.getDietMONGO(params['dietId']).subscribe(
+                (dietFetched: DietMONGO) => {
+                  // console.log("dietFetched", dietFetched)
+                  this.dietForm.patchValue({
+                    _id: dietFetched._id,
+                    dietName: dietFetched.dietName,
+                    dietDescription: dietFetched.dietDescription,
+                    dietRequirements: dietFetched.dietRequirements
+                  })
+                  // console.log("dietFetched", dietFetched)
+                  dietFetched.dietDays.forEach((dietDay:DietDayMONGO) => {
+                    this.addDietDay(dietDay)
+                  })
+                }
+              )
+              
+            }else{
+              this.dateSelected();
+            }
+            
+          }
+        )
+        this.updateDailyMacro();
+
+        //*************************************************** */
+        //*************************************************** */
+        //*************************************************** */
       }
     )    
 
-    this.dietRequirements.valueChanges.subscribe((dietRequirements) => {
-      this.dietRequirementsChanged(dietRequirements.dietRequirementsName);
-    })
-
-    this.route.params.subscribe(
-      (params: Params) => {
-        if(params['dietId']!=undefined){
-          this.dietService.getDietMONGO(params['dietId']).subscribe(
-            (dietFetched: DietMONGO) => {
-              // console.log("dietFetched", dietFetched)
-              this.dietForm.patchValue({
-                _id: dietFetched._id,
-                dietName: dietFetched.dietName,
-                dietDescription: dietFetched.dietDescription,
-                dietRequirements: dietFetched.dietRequirements
-              })
-
-              dietFetched.dietDays.forEach((dietDay:DietDayMONGO) => {
-                this.addDietDay(dietDay)
-              })
-
-              // console.log("dietFetched this.dietForm.value", this.dietForm.value)
-            }
-          )
-          // this.dietService.getDiet(+params['dietId']).subscribe(
-          //   (data) => {
-              
-              //this.diet = data;   
-
-              // this.days = this.convertToDateStruct(this.diet.days[0].date)!;
-              // var hoursChangedFlag = false;
-
-              // this.diet.days.forEach(
-              //   (day, dayIndex) => {
-              //     var temp_dayDishesArr: DietDish[] = new Array();
-              //     day.dishes.forEach(
-              //       (dish) => {
-              //         var dishTotalPortions = dish.quantity.split("/")[1]
-              //         if(+dishTotalPortions > 1){
-
-              //           //jeżeli dania nie ma na liście unused to dodaj
-              //            if(this.unusedDishesPortions.findIndex((unusedDish) => unusedDish.name == dish.name) == -1){
-              //               this.unusedDishesPortions.push(new DietDish(0, +dishTotalPortions-1+"/"+dishTotalPortions,"00:00",dish.name,dish.macro,dish.micro,dish.dishId,dish.tags));
-              //             //jeżeli jest to zdejmij z listy unused
-              //             }else{
-              //               var unusedDishIndex = this.unusedDishesPortions.findIndex((unusedDish) => unusedDish.name == dish.name);
-              //               var unusedDishQuantity = +this.unusedDishesPortions[unusedDishIndex].quantity.split("/")[0]
-              //               this.unusedDishesPortions[unusedDishIndex].quantity = (unusedDishQuantity-1)+"/"+dishTotalPortions;
-              //               if(unusedDishQuantity==1){
-              //                 this.unusedDishesPortions.splice(unusedDishIndex,1);
-              //               }
-              //             }
-              //         }
-              //         const hourIndex = this.diet.requirements.hours.findIndex((hour) => hour === dish.time)
-              //         if(hourIndex != -1){// godzina znaleziona
-              //           temp_dayDishesArr[hourIndex] = dish;
-              //         }else{
-              //           hoursChangedFlag = true;
-              //           //jeżeli danie jest na liście unused
-              //           var unusedDishIndex = this.unusedDishesPortions.findIndex((unusedDish) => unusedDish.name == dish.name);
-              //           var unusedDishQuantity = +this.unusedDishesPortions[unusedDishIndex].quantity.split("/")[0]
-                        
-              //           if(unusedDishIndex != -1){//danie znalezione
-              //             this.unusedDishesPortions[unusedDishIndex].quantity = (unusedDishQuantity+1)+"/"+dishTotalPortions;
-              //           }else{
-              //             this.unusedDishesPortions.push(dish);
-              //           }
-
-              //         }
-              //       }
-              //     )             
-              //     this.diet.days[dayIndex].dishes = temp_dayDishesArr;
-              //   }
-              // )  
-
-              // if(hoursChangedFlag){
-              //   confirm("Hours has changed")
-              // }
-             
-              // if(this.diet.requirements==null){
-              //   if(confirm("Diet requirements has been deleted. Select new")) {
-              //     this.diet.requirements= new DietRequirements()
-              //   }
-              // }
-
-              // this.dietForm.patchValue({
-              //   name: this.diet.name,
-              //   description: this.diet.description,
-              //   requirements: this.diet.requirements.name
-              // })
-              // this.updateDailyMacro();
-              // if(this.route.snapshot.routeConfig?.path?.includes("copy")){
-              //   this.requireSave = true;
-              //   this.diet.id = 0;
-              // }else{
-              //   this.requireSave = false;
-              // }
-              
-          //   }
-          // );
-
-        }else{
-          // var days: DietDay[] = [
-          //   new DietDay(),
-          //   new DietDay(),
-          //   new DietDay(),
-          //   new DietDay(),
-          //   new DietDay(),
-          //   new DietDay(),
-          //   new DietDay()
-          // ]  
-          // this.diet.days = days;
-          // this.selectToday();
-          this.dateSelected();
-        }
-        
-      }
-    )
-    this.updateDailyMacro();
+   
 
     this.dietForm.statusChanges.subscribe(
       (status) =>{
@@ -392,7 +307,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     
   }
 
-
   canExit(): Promise<boolean> {
     if (this.requireSave == false) {
       return Promise.resolve(true);
@@ -444,30 +358,98 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     }
   }
 
+  increaseDishPortion(dishData: [dishIndex: number, dayId: number]){
+    const day = this.dietDays.at(dishData[1]) as FormGroup;
+    const dishToModify = this.getDayDishes(day).at(dishData[0]) as FormGroup;
+    const dishToModifyId = dishToModify.value.dishId
+    const prevoiusDishQuantity = dishToModify.value.dietDishQuantity;
+    const newDishQuantity = prevoiusDishQuantity+1;
+    this.calculateDishMacroAfterQuantityChange(dishToModify,prevoiusDishQuantity,newDishQuantity);
+
+    let unusedDish = this.unusedDishes.find(dish => dish.dish._id === dishToModifyId);
+    if(unusedDish){
+      unusedDish.usedPortions++
+      if(unusedDish.usedPortions === unusedDish.dish.dishPortions){
+        let unusedDishIndex = this.unusedDishes.findIndex(x => x.dish._id === unusedDish!.dish._id)
+        this.unusedDishes.splice(unusedDishIndex,1);
+      }
+    }else{
+      if(dishToModify.value.dietDishQuantity > dishToModify.value.dishPortions){
+        this.dishService.getDishMONGO(dishToModifyId).subscribe(
+          (dishFetched) => {
+            if(this.unusedDishes.findIndex((unusedDish) => unusedDish.dish._id === dishFetched._id) === -1){
+              if(dishFetched.dishPortions != 1){
+                this.unusedDishes.push(new UnusedDish(dishFetched, 1));
+              }
+            }        
+          }
+        )
+
+      }
+    }
+  }
+
+  decreaseDishPortion(dishData: [dishIndex: number, dayId: number]){
+    const day = this.dietDays.at(dishData[1]) as FormGroup;
+    const dishToModify = this.getDayDishes(day).at(dishData[0]) as FormGroup;
+    const dishToModifyId = dishToModify.value.dishId
+    const prevoiusDishQuantity = dishToModify.value.dietDishQuantity;
+    const newDishQuantity = prevoiusDishQuantity-1;
+    if(newDishQuantity != 0){
+      this.calculateDishMacroAfterQuantityChange(dishToModify,prevoiusDishQuantity,newDishQuantity);
+      
+      let unusedDish = this.unusedDishes.find(dish => dish.dish._id === dishToModifyId);
+      if(unusedDish){
+        unusedDish.usedPortions--
+        if(unusedDish.usedPortions === 0){
+          let unusedDishIndex = this.unusedDishes.findIndex(x => x.dish._id === unusedDish!.dish._id)
+          this.unusedDishes.splice(unusedDishIndex,1);
+        }
+      }
+
+    }
+  }
+
+  calculateDishMacroAfterQuantityChange(dishToModify: FormGroup, prevoiusDishQuantity: number, newDishQuantity: number){
+    const precision = 1;
+    let proteins = +dishToModify.value.dietDishProteins;
+    let carbohydrates = +dishToModify.value.dietDishCarbohydrates;
+    let fat = +dishToModify.value.dietDishFat;
+    let kcal = +dishToModify.value.dietDishKcal;
+    //przywrócenie macro do poziomu gdzie quantity = 1 do kalkulacji
+    proteins = proteins * (1/prevoiusDishQuantity);
+    carbohydrates = carbohydrates * (1/prevoiusDishQuantity);
+    fat = fat * (1/prevoiusDishQuantity);
+    kcal = kcal * (1/prevoiusDishQuantity);
+
+    dishToModify.patchValue({  
+      dietDishQuantity: newDishQuantity,
+      dietDishProteins: Number((proteins * newDishQuantity).toFixed(precision).toString()),
+      dietDishCarbohydrates: Number((carbohydrates * newDishQuantity).toFixed(precision).toString()),
+      dietDishFat: Number((fat * newDishQuantity).toFixed(precision).toString()),
+      dietDishKcal: Number((kcal * newDishQuantity).toFixed(precision).toString()),
+    });
+    this.updateDailyMacro();
+  }
+
   deleteDish(dishData: [dishIndex: number, dayId: number]){
     const dishes = this.dietDays.at(dishData[1]).get('dayDishes') as FormArray;
+    const dish = dishes.at(dishData[0]).value
     dishes.setControl(dishData[0],this.fb.control(undefined)); 
     this.updateDailyMacro();
-    // if(this.diet.days[dishData[1]].dishes[dishData[0]].quantity != "1/1"){
-      // var tempDish = this.diet.days[dishData[1]].dishes[dishData[0]];
-    //   tempDish.time="00:00"
-    //   var dishTotalPortions = tempDish.quantity.split("/")[1];
-    //   tempDish.quantity = "1/"+dishTotalPortions
 
-    //   let unusedDishIndex = this.unusedDishesPortions.findIndex(x=>x.name == tempDish.name)
+    console.log("dishId", dish)
+    const unusedDishIndex = this.unusedDishes.findIndex((unusedDish) => unusedDish.dish._id === dish.dishId)
+    if(unusedDishIndex === -1){
+      if(dish.dishPortions != 1){
+        this.unusedDishes.push(new UnusedDish(dish, 1));
+      }
+    }else{
+      this.unusedDishes[unusedDishIndex].usedPortions--
+    }  
 
-    //   if(unusedDishIndex != -1){//znaleziono
-    //     var portions = this.unusedDishesPortions[unusedDishIndex].quantity.split("/")[0];
-    //     this.unusedDishesPortions[unusedDishIndex].quantity = +portions+1+"/"+dishTotalPortions;
-    //   }else{
-    //     this.unusedDishesPortions.push(tempDish);
-    //   }
-         
-    // }
+    this.updateDailyMacro();
 
-    // this.renumberPortions(tempDish);
-    // this.updateDailyMacro();
-    // this.requireSave = true;
   }
 
   addDish(dayNumber: number, dishIndex: number, dish: DishMONGO){
@@ -516,22 +498,23 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
   // }
 
   updateDailyMacro(){
-    var precision: number = 1;
+    var precision: number = 0;
     this.clearDailyMacro();
     this.dietDays.controls.forEach((dietDay, dayIndex) => {
       this.getDayDishes(dietDay as FormGroup).controls.forEach((dish) => {
         if(dish.value != undefined){
-          this.inDay[dayIndex].proteins = this.inDay[dayIndex].proteins + dish.value.dietDishProteins;
-          this.inDay[dayIndex].carbohydrates = this.inDay[dayIndex].carbohydrates + dish.value.dietDishCarbohydrates;
-          this.inDay[dayIndex].fat = this.inDay[dayIndex].fat + dish.value.dietDishFat;
-          this.inDay[dayIndex].kcal = this.inDay[dayIndex].kcal + dish.value.dietDishKcal;
+          this.inDay[dayIndex].proteins = Number((this.inDay[dayIndex].proteins + dish.value.dietDishProteins).toString());
+          this.inDay[dayIndex].carbohydrates = Number((this.inDay[dayIndex].carbohydrates + dish.value.dietDishCarbohydrates).toFixed(precision));
+          this.inDay[dayIndex].fat = Number((this.inDay[dayIndex].fat + dish.value.dietDishFat).toFixed(precision));
+          this.inDay[dayIndex].kcal = Number((this.inDay[dayIndex].kcal + dish.value.dietDishKcal).toFixed(precision));
         }   
       })
-      this.difference[dayIndex].proteins = this.dietRequirements.value.dietRequirementsProteins - this.inDay[dayIndex].proteins;
-      this.difference[dayIndex].carbohydrates = this.dietRequirements.value.dietRequirementsCarbohydrates - this.inDay[dayIndex].carbohydrates;
-      this.difference[dayIndex].fat = this.dietRequirements.value.dietRequirementsFat - this.inDay[dayIndex].fat;
-      this.difference[dayIndex].kcal = this.dietRequirements.value.dietRequirementsKcal - this.inDay[dayIndex].kcal;
+      this.difference[dayIndex].proteins = Number((this.dietRequirements.value.dietRequirementsProteins - this.inDay[dayIndex].proteins).toFixed(precision));
+      this.difference[dayIndex].carbohydrates = Number((this.dietRequirements.value.dietRequirementsCarbohydrates - this.inDay[dayIndex].carbohydrates).toFixed(precision));
+      this.difference[dayIndex].fat = Number((this.dietRequirements.value.dietRequirementsFat - this.inDay[dayIndex].fat).toFixed(precision));
+      this.difference[dayIndex].kcal = Number((this.dietRequirements.value.dietRequirementsKcal - this.inDay[dayIndex].kcal).toFixed(precision));
     })
+    this.requireSave = true;
   };
   
   clearDailyMacro(){

@@ -13,7 +13,6 @@ export class SharedManagementComponent implements OnInit{
 
   $PortionNames!: PortionNameMONGO[];
   allPortionNames!: PortionNameMONGO[];
-  
 
   constructor(private PortionNameService: PortionNameService){}
 
@@ -22,7 +21,6 @@ export class SharedManagementComponent implements OnInit{
       (portionNames) => {
         this.$PortionNames = portionNames;
         this.allPortionNames = portionNames;
-        console.log(this.allPortionNames);
       }
     )
   }
@@ -34,30 +32,24 @@ export class SharedManagementComponent implements OnInit{
       portionName.portionName = event.target.value;
       this.PortionNameService.savePortionNameMONGO(portionName).subscribe(
         (response) => {
-          console.log(response)
         }
       )
     }else{
       this.PortionNameService.deletePortionNameMONGO(pt._id).subscribe(
         (response) => {
-          console.log(response);
         }
       )
     }
   }
 
   newPortionName(event: any) {
-    var portion: PortionNameMONGO = {_id:"", portionName:""};
-    
+    var portion: PortionNameMONGO = {_id:"", portionName:""}; 
     portion.portionName = event.target.value;
-
     this.PortionNameService.savePortionNameMONGO(portion).subscribe(
         (data) => {
-          console.log("new portion added", data);
         }
     )
     event.target.value = "";
-
   }
 
 }

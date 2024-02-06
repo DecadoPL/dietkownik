@@ -39,7 +39,7 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
       _id: undefined,
       dishName: [null, Validators.required],
       dishPortions: [1, [Validators.required, Validators.min(1), Validators.max(100)]],
-      dishRecipe: [null, Validators.required],
+      dishRecipe: [null],
       dishIngredients: this.fb.array([]), 
       dishProteinsPerPortion: [0, [Validators.required, Validators.min(0), Validators.max(100000)]],
       dishCarbohydratesPerPortion: [0, [Validators.required, Validators.min(0), Validators.max(100000)]],
@@ -314,8 +314,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
     return newIngr;
   }
  
-  
-
   addIngredient(ingr?: DishIngredientMONGO) {
     if(this.newIngr != undefined){//jeżeli dodajemy ingredient ręcznie
       this.ingredientService.getIngredientMONGO(this.newIngr._id).subscribe(

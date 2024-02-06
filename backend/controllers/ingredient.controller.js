@@ -41,17 +41,13 @@ exports.saveIngredient = (req, res, next) => {
         ingrKcal: req.body.ingrKcal,
         ingrPortions: req.body.ingrPortions || []
     };
-    
-
 
     for (let i = 0; i < ingredientData.ingrPortions.length; i++) {
         if(ingredientData.ingrPortions[i]._id == null){
             ingredientData.ingrPortions[i]._id = new mongoose.Types.ObjectId();
         }
     }
-
-    console.log(ingredientData);
-
+    
     let existingIngredient;
 
     IngredientDB.findOne({ _id: ingredientData._id })
