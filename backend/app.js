@@ -9,30 +9,6 @@ var devDatabaseUrl;
 var prodDatabaseUrl
 let config;
 
-function sendRegularRequest(url, interval) {
-    setInterval(() => {
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            // throw new Error('Network response was not ok');
-          }
-          return response.text();
-        })
-        .then(data => {
-        //   console.log('Received data:', data);
-          // You can process the received data here as needed
-        })
-        .catch(error => {
-        //   console.error('Error:', error);
-        });
-    }, interval);
-  }
-  
-  // Example usage:
-  const url = 'https://example.com'; // Replace this with the desired URL
-  const interval = 5000; // 5000 milliseconds = 5 seconds
-  sendRegularRequest(url, interval);
-
 try {
   config = require('./config.js');
   devDatabaseUrl = config.database.dev_connectionString;

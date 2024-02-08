@@ -207,17 +207,14 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
                   dietFetched.dietDays.forEach((dietDay:DietDayMONGO) => {
                     this.addDietDay(dietDay)
                   })
+                  this.updateDailyMacro();
                 }
               )
-              
             }else{
               this.dateSelected();
-            }
-            
+            }  
           }
         )
-        this.updateDailyMacro();
-
         //*************************************************** */
         //*************************************************** */
         //*************************************************** */
@@ -353,8 +350,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
         }
       });
        this.requireSave = true;
-
-      //this.router.navigate(['dishes']);
     }
   }
 
@@ -474,36 +469,13 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
 
   }
 
-  // renumberPortions(dish: DietDish){
-    // var dishTotalPortions = dish.quantity.split("/")[1];
-    // var dishCurrentPortion = 1;
-    // this.diet.days.forEach(
-    //   (day)=>{
-    //     var tempDishes = day.dishes.filter(dayDish => {
-    //       if(dayDish && dayDish.dishId == dish.dishId){
-    //         return true;
-    //       }else{
-    //         return false;
-    //       }
-    //     })
-    //     tempDishes.forEach(
-    //       (dish) => {
-    //         dish.quantity = dishCurrentPortion+"/"+dishTotalPortions;
-    //         dishCurrentPortion++;
-    //         if(dishCurrentPortion > +dishTotalPortions) dishCurrentPortion = 1;
-    //       }
-    //     )
-    //   }
-    // )
-  // }
-
   updateDailyMacro(){
     var precision: number = 0;
     this.clearDailyMacro();
     this.dietDays.controls.forEach((dietDay, dayIndex) => {
       this.getDayDishes(dietDay as FormGroup).controls.forEach((dish) => {
         if(dish.value != undefined){
-          this.inDay[dayIndex].proteins = Number((this.inDay[dayIndex].proteins + dish.value.dietDishProteins).toString());
+          this.inDay[dayIndex].proteins = Number((this.inDay[dayIndex].proteins + dish.value.dietDishProteins).toFixed(precision));
           this.inDay[dayIndex].carbohydrates = Number((this.inDay[dayIndex].carbohydrates + dish.value.dietDishCarbohydrates).toFixed(precision));
           this.inDay[dayIndex].fat = Number((this.inDay[dayIndex].fat + dish.value.dietDishFat).toFixed(precision));
           this.inDay[dayIndex].kcal = Number((this.inDay[dayIndex].kcal + dish.value.dietDishKcal).toFixed(precision));

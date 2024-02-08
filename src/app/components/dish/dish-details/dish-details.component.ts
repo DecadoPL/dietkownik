@@ -105,10 +105,12 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
               this.requireSave = false;
             }
           );
+        }else{
+          this.newDishFlag = true
         }
       }
     )
-    this.newDishFlag = true
+    
     this.dishForm.statusChanges.subscribe(
       (status) =>{
         if(status=="VALID"){
@@ -195,6 +197,18 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
         next: (response) => {
           this.toastrService.success(response.message, 'SUCCESS');
           this.requireSave = false;
+          this.dishForm.patchValue({
+            _id: undefined,
+            dishName: undefined,
+            dishPortions: 1,
+            dishRecipe: undefined,
+            dishProteinsPerPortion: 0,
+            dishCarbohydratesPerPortion: 0,
+            dishFatPerPortion: 0,
+            dishKcalPerPortion: 0,
+          })
+          this.dishIngredients.clear();
+          console.log(this.dishForm.value)
         },
         error: (error) => {
           let errMessage = error.toString();
@@ -202,8 +216,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
         }
       });
        this.requireSave = true;
-
-      //this.router.navigate(['dishes']);
     }
   }
 
@@ -346,6 +358,7 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
             prevoiusDishIngrQuantity = newDishIngrQuantity;
           })
           this.calculateDishMacro();
+          this.newIngr = new IngredientListItemMONGO("","");
        })
     } else if(ingr) { //dodawanie ingr pobranego z bazy danych przy zaciąganiu dania
       let dishIngr: DishIngredientMONGO = ({

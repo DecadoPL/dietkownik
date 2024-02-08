@@ -54,16 +54,10 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
         this.$portionNames = portionNames;
         if(this.newIngredientFlag === true){
           this.ingrPortions.push(this.newPortion(new PortionMONGO(undefined, this.$portionNames[0]._id, this.$portionNames[0].portionName, 100)));
-          
-          //tutaj był kod wyłączania edytowalności pierwszej pozycji 100g. Ale disable wyłącza ten wiersz z formularza i nie zapisuje się w bazie danych
-          // const firstRow = this.ingrPortions.at(0) as FormGroup;
-          // Object.keys(firstRow.controls).forEach(key => {
-          //   firstRow.get(key)!.disable();
-          // });
+          this.requireSave = false;
         }
         this.$portionNames.splice(0,1);//po dodaniu 100g do składnika usuwamy z listy aby nie można było dodać więcej 100g bo to bez sensu.
-
-        // console.log("ingrPortions", this.ingrPortions.value);
+        
       }
     )
 
@@ -72,7 +66,6 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
         if(params['id']!=undefined){
           this.ingredientService.getIngredientMONGO(params['id']).subscribe(
             (ingredientFetched: IngredientMONGO) => {
-              // console.log(ingredientFetched)
               this.newIngredientFlag = false;
               this.ingredientForm.patchValue({
                 _id: ingredientFetched._id,
@@ -88,13 +81,11 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
                   this.ingrPortions.push(this.newPortion(new PortionMONGO(portion._id, portion.ingrPortionNameId, portion.ingrPortionName, portion.ingrPortionWeight)));
                 })
               }
-
               this.subscriptions();
+              this.requireSave = false;
             }
-          )
-          this.requireSave = false;
-        }else{
-          
+          )  
+        }else{        
           this.newIngredientFlag = true;
           this.subscriptions();
         }
@@ -198,6 +189,7 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
         .subscribe( {
           next: (response) => {
             this.toastrService.success(response.message, 'SUCCESS');
+            this.ingredientForm.reset();
             this.requireSave = false;
           },
           error: (error) => {
