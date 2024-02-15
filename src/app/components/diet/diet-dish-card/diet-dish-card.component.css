@@ -82,9 +82,7 @@
 @media only screen 
 and (max-device-width: 1280px) 
 and (max-device-height: 800px) 
-and (min-resolution: 192dpi)
-and (-webkit-device-pixel-ratio:2)
-and (orientation : landscape) {
+{
   .diet-dish-card {
     border: 0;
     border-radius: 25%;
