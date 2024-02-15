@@ -1,6 +1,6 @@
   <div class="diet-dish-card">
     
-    <div class="diet-dish-card__name" [routerLink]="[dayId, dish.dishId]">
+    <div class="diet-dish-card__name" (click)="showDishDetails.emit(dish)">
       <span class="dish-name">{{ dish.dishName }}</span>
       <button class="delete-button" (click)="deleteCard.emit([dishIndex, dayId])">X</button>
     </div>

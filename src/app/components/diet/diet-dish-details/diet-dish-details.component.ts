@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DietDishMONGO } from 'src/app/models/diet/dietDishMONGO.model';
+import { DishMONGO } from 'src/app/models/dish/dishMONGO.model';
 import { DishService } from 'src/app/services/dish.service';
 
 @Component({
@@ -9,29 +10,24 @@ import { DishService } from 'src/app/services/dish.service';
 })
 export class DietDishDetailsComponent implements OnInit{
 
-  // dish!: DishMONGO;
-  dietId!: number;
-  dayId!: number;
-  dishId!: number;
+  dish?: DishMONGO;
+  @Input() dietDish!: DietDishMONGO;
+  @Output() close = new EventEmitter<void>();
 
-  constructor(private route: ActivatedRoute,
-              private dishService: DishService){}
+  constructor(private dishService: DishService){}
 
-  ngOnInit(){
-    this.route.params.subscribe(
-      (params: Params) => {
-
-        this.dietId = +params['dietId'];
-        this.dayId = +params['dayId'];
-        this.dishId = +params['dishId'];
-        
-        // this.dishService.getDish(this.dishId).subscribe(
-        //   (dish) => {
-        //     this.dish = dish;
-        //   }
-        // )
-      }
-    )
+  ngOnInit(): void {
+    console.log(this.dietDish)
+    this.dishService.getDishMONGO(this.dietDish.dishId!).subscribe(
+      (dishFetched) => {
+        this.dish = dishFetched;
+        console.log("this.dish", this.dish)
+      })
   }
+
+  onClose(){
+    this.close.emit();
+  }
+
 
 }

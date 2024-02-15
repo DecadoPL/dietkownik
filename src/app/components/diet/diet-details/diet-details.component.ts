@@ -41,6 +41,8 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
   requireSave: boolean = false;
   alertMsg!: string;
   alert: boolean = false;
+  showDishDetailsFlag = false;
+  dishToShowDetails!: DietDishMONGO;
   inDay: DietReq[] =  [
     {proteins:0,carbohydrates:0,fat:0,kcal:0},
     {proteins:0,carbohydrates:0,fat:0,kcal:0},
@@ -403,6 +405,17 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
       }
 
     }
+  }
+
+  showDishDetails(dishToShowDetails: DietDishMONGO){
+    this.dishToShowDetails = dishToShowDetails
+    
+    this.showDishDetailsFlag = true;
+  }
+
+  closeDishDetails(){
+    const dishToShow = undefined;
+    this.showDishDetailsFlag = false;
   }
 
   calculateDishMacroAfterQuantityChange(dishToModify: FormGroup, prevoiusDishQuantity: number, newDishQuantity: number){

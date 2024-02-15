@@ -78,3 +78,23 @@
   border: 0;
 }
 
+
+@media screen and (min-width: 1024px) and (min-height: 768px) {
+  .diet-dish-card {
+    border: 0;
+    border-radius: 25%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr auto auto;
+  }
+  
+  .diet-dish-card > div {
+    font-size: 0.55rem;
+  }
+  
+  .diet-dish-card__name {
+    height: 2rem;
+  }
+}

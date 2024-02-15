@@ -1,0 +1,34 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.75);
+    z-index: 50;
+  }
+  
+  .diet-dish-details {
+    position: fixed;
+    top: 10vh;
+    left: 35vw;
+    width: 50vw;
+    z-index: 100;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+    border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+  }
+  
+  .diet-dish-details-actions{
+    text-align: center;
+  }
+    
+  .box-header{
+    border-bottom-style: solid;
+    border-width: var(--thick-border-width);
+    border-color: var(--medium-grey);
+    height: 2rem;
+    width: 100%;
+  }
+  
+  

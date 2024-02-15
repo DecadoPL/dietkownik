@@ -179,4 +179,34 @@ form {
 }
 
 
+@media screen and (min-width: 1024px) and (min-height: 768px) {
+  .diet__day {
+   margin: 0.1rem auto;
+   min-width: 12vw;
+   max-width: 13vw;
+   /* box-shadow: 0 0 0.7rem; */
+ }
+ 
+  .day__macro {
+    margin: 0.25rem 0.15rem;
+    padding: 0.1rem;
+    grid-template-rows: repeat(5, 0.5fr);
+
+  }
+
+  .day__macro div {
+    font-size: 0.5rem;
+  }
+
+  .day__date {
+    width: 4rem;
+    height: 0.8rem; 
+  }
+    
+  .slot__card {
+    margin: 0.25rem 0.15rem; 
+  }
+}
+
+
 

@@ -15,6 +15,7 @@ export class DietDishCardComponent implements OnInit {
   @Output() deleteCard = new EventEmitter<[number, number]>();
   @Output() increaseDishPortion = new EventEmitter<[number, number]>();
   @Output() decreaseDishPortion = new EventEmitter<[number, number]>();
+  @Output() showDishDetails = new EventEmitter<DietDishMONGO>();
   
   ngOnInit(){
   }

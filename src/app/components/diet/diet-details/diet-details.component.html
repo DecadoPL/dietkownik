@@ -1,11 +1,13 @@
 <app-alert [message]="alertMsg" *ngIf="alert" (cancel)="alertCancel()" (save)="alertSave()" (discard)="alertDiscard()"></app-alert>
+<app-diet-dish-details *ngIf="showDishDetailsFlag" (close)="closeDishDetails()" [dietDish]="dishToShowDetails">
+</app-diet-dish-details>
 
 <div class="component" >
 <form [formGroup]="dietForm" (ngSubmit)="onSubmit()">
 
   <div class="formGroup" formGroupName="dietRequirements">
     <label for="requirements">Diet requirements</label>
-    <select id="requirements" formControlName="dietRequirementsName" class="select" style="width:300px;">
+    <select id="requirements" formControlName="dietRequirementsName" class="select">
       <option value="">Select requirements</option>
       <option *ngFor="let requirement of allRequirements" [value]="requirement.dietRequirementsName">
         {{ requirement.dietRequirementsName}}
@@ -15,7 +17,7 @@
   
   <div class="formGroup">
     <label for="dietName">Diet name</label>
-    <input type="text" id="dietName" formControlName="dietName" class="input" style="width:300px;">
+    <input type="text" id="dietName" formControlName="dietName" class="input">
     <span *ngIf="!dietForm.get('dietName')?.valid && dietForm.get('dietName')?.touched" class="text-danger">
       Please enter a valid name
     </span>
@@ -23,7 +25,7 @@
 
   <div class="formGroup">
     <label for="dietDescription">Description</label>
-    <input type="text" id="dietDescription" formControlName="dietDescription" class="input" style="width:300px;">
+    <input type="text" id="dietDescription" formControlName="dietDescription" class="input">
     <span *ngIf="!dietForm.get('dietDescription')?.valid && dietForm.get('dietDescription')?.touched" class="text-danger">
       Please enter a valid description
     </span>
@@ -41,7 +43,7 @@
       <div class="day__name" *ngIf="dayId==0">
         {{day.dayName}}
           <input
-            class="input day__date "
+            class="input day__date"
             placeholder="yyyy-mm-dd"
             name="dp"
             [(ngModel)]="date"
@@ -95,7 +97,8 @@
           [dishIndex] = "dishIndex"
           (deleteCard) = "deleteDish($event); showInputs[dayId + '-' + dishIndex] = false"
           (increaseDishPortion) = "increaseDishPortion($event)"
-          (decreaseDishPortion) = "decreaseDishPortion($event)">
+          (decreaseDishPortion) = "decreaseDishPortion($event)"
+          (showDishDetails) = "showDishDetails($event)">
         </app-diet-dish-card>
     </div>
   </div>
