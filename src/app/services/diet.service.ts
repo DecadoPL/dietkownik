@@ -24,7 +24,7 @@ export class DietService{
     )
   }
 
-  getDishesListMONGO(): Observable<DietListItemMONGO[]>{
+  getDietsListMONGO(): Observable<DietListItemMONGO[]>{
     return this.http.get<{message: String, diets: DietListItemMONGO[]}>(this.urlMONGO)
       .pipe(
         map((dietsData: any) => {

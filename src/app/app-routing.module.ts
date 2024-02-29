@@ -35,6 +35,7 @@ const routes: Routes = [
   { path: 'diets/:dietId/:dayId/:dishId', component: DietDishDetailsComponent, canDeactivate: [CanDeactivateGuardService]},
 
   { path: 'shoppingList', component: ShoppingListListComponent},
+  { path: 'shoppingList/new', component: ShoppingListDetailsComponent},
   { path: 'shoppingList/:id', component: ShoppingListDetailsComponent},
  
   { path: 'dietRequirements', component: DietRequirementsListComponent},

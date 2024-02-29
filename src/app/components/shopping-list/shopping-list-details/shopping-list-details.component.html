@@ -1,4 +1,4 @@
-<!-- <div class="component">
+<div class="component">
   <div class="secondary-background">
   <form [formGroup]="shoppingListForm">
 
@@ -10,8 +10,8 @@
     <div class="formGroup">
       <label for="diets">Diets</label>
       <select formControlName="diets" multiple class="select"  #dietList>
-        <option *ngFor="let dietListItem of Diets" [value]="dietListItem.id">
-          {{ dietListItem.name }}
+        <option *ngFor="let dietListItem of $diets" [value]="dietListItem._id">
+          {{ dietListItem.dietName }}
         </option>
       </select>
     </div>
@@ -21,21 +21,21 @@
   <button class="button" (click)="generateShoppingList()">Generate shopping list</button>
 
   <p>To buy:</p>
-  <div class="grid-unchecked-container" *ngFor="let item of unchecked; let itemId = index">
-    <div><button class="delete-button" (click)="deleteItem(item)">X</button></div>
-    <div class="item__name">{{item.name}}</div>
-    <input class="input input--short" id ="quantity" type="text" [value]="item.quantity" (keydown.enter)="uncheckedUpdate($event, itemId)">
-    <div class="grid-item">{{item.portionName}}</div>
-    <div><button class="button" (click)="checkItem(item)">O</button></div>
+  <div class="grid-unchecked-container" *ngFor="let item of unchecked.controls; let itemIndex = index">
+    <div><button class="delete-button" (click)="deleteItemFromUnchecked(itemIndex)">X</button></div>
+    <div class="item__name">{{item.value.itemName}}</div>
+    <input class="input input--short" id ="quantity" type="text" [value]="item.value.itemWeight" (keydown.enter)="uncheckedUpdate($event, itemIndex)">
+    <div class="grid-item">XYZ</div>
+    <div><button class="button" (click)="checkItem(item.value, itemIndex)">O</button></div>
   </div>
   <hr>
   <p>Bought:</p>
-  <div class="grid-checked-container" *ngFor="let item of checked">
-    <div><button class="delete-button" (click)="deleteItem(item)">X</button></div>
-    <div class="item__name">{{item.name}}</div>
-    <div class="grid-checked-item">{{item.quantity}}</div>
-    <div class="grid-checked-item">{{item.portionName}}</div>
-    <div><button class="button" (click)="uncheckItem(item)">O</button></div>
+  <div class="grid-checked-container" *ngFor="let item of checked.controls; let itemIndex = index">
+    <div><button class="delete-button" (click)="deleteItemFromChecked(itemIndex)">X</button></div>
+    <div class="item__name">{{item.value.itemName}}</div>
+    <div> {{item.value.itemWeight}}</div>
+    <div class="grid-item">XYZ</div>
+    <div><button class="button" (click)="uncheckItem(item.value, itemIndex)">O</button></div>
   </div>
 
   <label>Aditional items</label>
@@ -43,4 +43,4 @@
 </div>
 </div>
 
- -->
+

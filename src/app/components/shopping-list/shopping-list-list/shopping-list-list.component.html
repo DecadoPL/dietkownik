@@ -1,23 +1,35 @@
-<!-- <div class="component">
+<div class="component">
+  <app-delete-alert [message]="alertMsg" *ngIf="alert" (deleteCancel)="deleteCancel()" (deleteConfirm)="deleteConfirm()"></app-delete-alert>
 
-  <button class="button" routerLink="/shoppingList/new">Add new</button>
+  <button type="button" class="button" routerLink="/shoppingList/new">Add new</button>
+  <div class="search">
+    <label for="search">Search for:</label>
+    <input type="text" id="search" class="input" [(ngModel)]="searchText" (ngModelChange)="onSearch()">
+  </div>
+  
   <hr>
-
-  <div *ngIf="!shoppingLists">
+  <div *ngIf="!$shoppingLists">
     <span class="sr-only">Loading...</span> 
     <br>
     <div class="spinner-border" role="status"></div>
   </div>
 
-  <table *ngIf="shoppingLists">
-    <tr *ngFor="let shoppingList of shoppingLists">
-      <td> <app-shopping-list-list-item
+  <table *ngIf="$shoppingLists">
+    <tr *ngFor="let shoppingList of shoppingListsToDisplay">
+      <td>
+        <app-shopping-list-list-item
         [shoppingList]="shoppingList"
-        [index]="shoppingList.id"
-        ></app-shopping-list-list-item></td>
-      <td><button class="delete" (click)="deleteItem(shoppingList.id)">delete</button></td>
-
+        [index]="shoppingList._id"
+        ></app-shopping-list-list-item>
+      </td>
+      <td>
+        <button class="delete-button" (click)="deleteItem(shoppingList._id)">delete</button>
+      </td>
     </tr>
   </table>
 
-</div> -->
+</div>
+
+
+
+

@@ -72,16 +72,6 @@ exports.getDietById = (req, res, next) => {
     });
 }
 
-exports.getDietsWithStringInName = (req,res,next) => {
-    DietDB.find({ dietName: { $regex: req.params.str, $options: 'i' } }, {_id: 1, dietName: 1})
-    .then(result => {
-        res.status(200).json({
-            message: "Diets fetched successfully",
-            diets: result
-        });
-    });
-};
-
 exports.deleteDietById = (req, res, next) => {
     DietDB.deleteOne({_id: req.params.id})
     .then(result => {

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ShoppingListListItemMONGO } from 'src/app/models/shoppingList/shoppingListListItemMONGO.model';
 
 @Component({
   selector: 'app-shopping-list-list-item',
@@ -7,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ShoppingListListItemComponent {
 
-  // @Input() shoppingList!: ShoppingListListItem;
-  // @Input() index!: number;
+  @Input() shoppingList!: ShoppingListListItemMONGO;
+  @Input() index!: string;
   
 }

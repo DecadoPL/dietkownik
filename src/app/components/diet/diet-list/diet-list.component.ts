@@ -51,7 +51,7 @@ export class DietListComponent implements OnInit{
   }
 
   loadDietsList(){
-    this.dietService.getDishesListMONGO()
+    this.dietService.getDietsListMONGO()
     .subscribe((dishesList: DietListItemMONGO[]) => {
         this.$diets = dishesList.sort((a,b) => {
           return a.dietName.localeCompare(b.dietName);

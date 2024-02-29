@@ -5,6 +5,7 @@ const dishController = require('../backend/controllers/dish.controller');
 const portionNameController = require('../backend/controllers/portionName.controller');
 const dietRequirementsController = require('../backend/controllers/dietRequirements.controller')
 const dietController = require('../backend/controllers/diet.controller')
+const shoppingListController = require('../backend/controllers/shoppingList.controller')
 const router = express.Router();
 
 router.get('/api/portionNames', portionNameController.getAllPortionNames);
@@ -26,12 +27,17 @@ router.delete('/api/dishes/delete/:id',dishController.deleteDishById);
 router.post('/api/diets', dietController.saveDiet);
 router.get('/api/diets', dietController.getAllDietsNames);
 router.get('/api/diets/:id', dietController.getDietById);
-router.get('/api/diets/search/:str', dietController.getDietsWithStringInName);
 router.delete('/api/diets/delete/:id', dietController.deleteDietById);
 
 router.post('/api/dietRequirements', dietRequirementsController.saveDietRequirements);
 router.get('/api/dietRequirements', dietRequirementsController.getAllDietRequirementsNames);
 router.get('/api/dietRequirements/:id', dietRequirementsController.getDietRequirementsById);
 router.delete('/api/dietRequirements/delete/:id',dietRequirementsController.deleteDietRequirementsById);
+
+router.post('/api/shoppinglists', shoppingListController.saveShoppingList);
+router.get('/api/shoppinglists', shoppingListController.getAllShoppingListsNames);
+router.post('/api/shoppinglists/dietsItemsFetch', shoppingListController.dietsItemsFetch);
+router.get('/api/shoppinglists/:id', shoppingListController.getShoppingListById);
+router.delete('/api/shoppinglists/delete/:id', shoppingListController.deleteShoppingListById);
 
 module.exports = router;

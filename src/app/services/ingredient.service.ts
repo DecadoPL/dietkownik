@@ -11,7 +11,6 @@ export class IngredientService{
 
   constructor(private http: HttpClient){}
 
-  //private urlMONGO = environment.mainUrlMongo + 'api/ingredients/';
   private urlMONGO = environment.backendMainUrl + 'api/ingredients/';
 
   getIngredientsListMONGO(): Observable<IngredientListItemMONGO[]> {

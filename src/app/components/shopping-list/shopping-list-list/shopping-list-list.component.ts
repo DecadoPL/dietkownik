@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ShoppingListListItemMONGO } from 'src/app/models/shoppingList/shoppingListListItemMONGO.model';
 import { ShoppingListService } from 'src/app/services/shoppingList.service';
 
 @Component({
@@ -8,31 +9,65 @@ import { ShoppingListService } from 'src/app/services/shoppingList.service';
   styleUrls: ['./shopping-list-list.component.css']
 })
 export class ShoppingListListComponent {
-  // shoppingLists!: ShoppingListListItem[];
+  $shoppingLists!: ShoppingListListItemMONGO[];
+  shoppingListsToDisplay!: ShoppingListListItemMONGO[];
+  alertMsg!: string;
+  alert: boolean = false;
+  itemId!: string;
+  searchText!: string;
 
   constructor(private shoppingListService: ShoppingListService,
-              private router: Router){}
+              private toastrService: ToastrService){}
   
   ngOnInit(){
-    // this.shoppingListService.getShoppingLists().subscribe(
-    //   (data) => {
-    //     this.shoppingLists = data;
-    //   }
-    // );
+    this.loadShoppingListsList();
   }
 
-  deleteItem(id: number){
-    // if(confirm("Are you sure to delete?")) {
-    //   this.shoppingListService.deleteShoppingList(id).subscribe(
-    //     (data) => {
-    //       this.shoppingListService.getShoppingLists().subscribe(
-    //         (data) => {
-    //           this.shoppingLists = data;
-    //         }
-    //       );
-    //     }
-    //   );
-    // }
+  deleteItem(id: string){
+    this.alertMsg = "Do you want to delete?"
+    this.alert = true;
+    this.itemId = id;
+  }
+
+  deleteCancel(){
+    this.alert = false;
+  }
+
+  deleteConfirm(){
+    this.shoppingListService.deleteShoppingListMONGO(this.itemId)
+    .subscribe({
+      next: (response) => {
+        this.toastrService.success(response.message, 'SUCCESS');
+        this.alert=false;
+        this.loadShoppingListsList();
+      },
+      error: (error) => {
+        let errMessage = error.toString()
+        this.toastrService.error(errMessage.replace("Error: ", ""), "ERROR");
+        this.alert=false;
+        this.loadShoppingListsList();
+      }
+    });  
+  }
+
+  loadShoppingListsList(){
+    this.shoppingListService.getShoppingListListMONGO()
+    .subscribe((shoppingList: ShoppingListListItemMONGO[]) => {
+        console.log("shoppingList", shoppingList)
+        this.$shoppingLists = shoppingList.sort((a,b) => {
+          return a.shoppingListName.localeCompare(b.shoppingListName);
+        });
+        this.shoppingListsToDisplay = this.$shoppingLists;
+      }
+    );
+  }
+
+  onSearch(){
+    if(this.searchText!=null){
+      this.shoppingListsToDisplay = this.$shoppingLists.filter(item => item.shoppingListName.toLowerCase().includes(this.searchText));
+    }else{
+      this.shoppingListsToDisplay = this.$shoppingLists;
+    }
   }
 
 }
