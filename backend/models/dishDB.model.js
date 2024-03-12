@@ -22,7 +22,7 @@ const dishIngredientSchema = mongoose.Schema({
 
 const dishSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    dishName: {type: String, required: true},
+    dishName: {type: String, required: true, unique: true},
     dishRecipe: {type: String, required: false},
     dishPortions: {type: Number, required: true},
     dishProteinsPerPortion: {type: Number, required: true},

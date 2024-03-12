@@ -19,7 +19,7 @@ export class DietService{
         return response;
       }),
       catchError((error) => {
-        throw new Error(error.error.error)
+        throw new Error(error.error.message)
       })
     )
   }
@@ -49,7 +49,7 @@ export class DietService{
           return dietsData.diet;
         }),
         catchError((error) => {
-          throw new Error(error.error.error)
+          throw new Error(error.error.message)
         })
       )
   }
@@ -62,7 +62,7 @@ export class DietService{
           return response;
         }),
         catchError((error) => {
-          throw new Error(error.error.error)
+          throw new Error(error.error.message)
         })
       )
   }

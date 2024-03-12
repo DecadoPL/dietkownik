@@ -1,4 +1,6 @@
 const IngredientDB = require('../models/ingredientDB.model');
+const DishDB = require('../models/dishDB.model');
+
 const mongoose = require('mongoose');
 
 exports.getAllIngredientNames = (req,res,next) => {
@@ -47,8 +49,9 @@ exports.saveIngredient = (req, res, next) => {
             ingredientData.ingrPortions[i]._id = new mongoose.Types.ObjectId();
         }
     }
-    
+
     let existingIngredient;
+    let dishesToUpdate = [];
 
     IngredientDB.findOne({ _id: ingredientData._id })
     .then(ingr => {
@@ -66,16 +69,49 @@ exports.saveIngredient = (req, res, next) => {
         }
     })
     .then(savedIngredient => {
-        res.status(201).json({
-        message: "Ingredient " + (existingIngredient ? "updated" : "added") + " successfully",
-        ingredientId: savedIngredient._id
-        });
+        if (!existingIngredient) {
+            return res.status(201).json({
+                message: "Ingredient added successfully",
+                ingredientId: savedIngredient._id
+            });
+        } else {
+            return DishDB.find({ 'dishIngredients.ingrId': existingIngredient._id });
+        }
+    })
+    .then(ret => {
+        if (ret.statusCode === undefined) {
+            dishesToUpdate = ret;
+            const dishUpdatePromises = dishesToUpdate.map(dish => {
+                dish.dishIngredients.forEach(ingredient => {
+                    if (ingredient.ingrId.equals(existingIngredient._id)) {
+                        ingredient.ingrName = ingredientData.ingrName;
+                        ingredient.ingrProteins = ingredientData.ingrProteins;
+                        ingredient.ingrCarbohydrates = ingredientData.ingrCarbohydrates;
+                        ingredient.ingrFat = ingredientData.ingrFat;
+                        ingredient.ingrKcal = ingredientData.ingrKcal;
+                        ingredient.ingrPortions = ingredientData.ingrPortions;
+                    }
+                });
+                dish.save();
+            });
+
+            res.status(201).json({
+                message: "Ingredient updated successfully",
+                ingredientId:  existingIngredient._id
+            });
+        }
     })
     .catch(err => {
-        console.log(err)
-        res.status(500).json({
-        message: "Error adding/updating ingredient"
-        });
+        if(err.code === 11000)
+        {
+            return res.status(500).json({
+                message: "There is already ingredient with this name"
+            });
+        } else {
+            return res.status(500).json({
+                message: "Error adding/updating ingredient"
+            });
+        }
     });
 };
 

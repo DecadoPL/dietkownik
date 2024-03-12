@@ -47,7 +47,7 @@ export class IngredientService{
         return response;
       }),
       catchError((error) => {
-        throw new Error(error.error.error);
+        throw new Error(error.error.message);
       })
     );
   }
@@ -60,7 +60,7 @@ export class IngredientService{
           return response;
         }),
         catchError((error) => {
-          throw new Error(error.error.error);
+          throw new Error(error.error.message);
         })
       );
   }

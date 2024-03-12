@@ -197,18 +197,24 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
         next: (response) => {
           this.toastrService.success(response.message, 'SUCCESS');
           this.requireSave = false;
-          this.dishForm.patchValue({
-            _id: undefined,
-            dishName: undefined,
-            dishPortions: 1,
-            dishRecipe: undefined,
-            dishProteinsPerPortion: 0,
-            dishCarbohydratesPerPortion: 0,
-            dishFatPerPortion: 0,
-            dishKcalPerPortion: 0,
-          })
-          this.dishIngredients.clear();
-          console.log(this.dishForm.value)
+
+          this.route.params.subscribe(
+            (params: Params) => {
+              if(params['id'] === undefined){
+                this.dishForm.patchValue({
+                  _id: undefined,
+                  dishName: undefined,
+                  dishPortions: 1,
+                  dishRecipe: undefined,
+                  dishProteinsPerPortion: 0,
+                  dishCarbohydratesPerPortion: 0,
+                  dishFatPerPortion: 0,
+                  dishKcalPerPortion: 0,
+                })
+                this.dishIngredients.clear();
+              }
+            })
+
         },
         error: (error) => {
           let errMessage = error.toString();

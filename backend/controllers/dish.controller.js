@@ -1,4 +1,6 @@
 const DishDB = require('../models/dishDB.model');
+const DietDB = require('../models/dietDB.model');
+
 const mongoose = require('mongoose');
 
 exports.saveDish = (req, res, next) => {
@@ -21,6 +23,7 @@ exports.saveDish = (req, res, next) => {
     }
 
     let existingDish;
+    let dietsToUpdate = [];
     DishDB.findOne({_id: dishData._id})
     .then(dish => {
         existingDish = dish;
@@ -39,16 +42,30 @@ exports.saveDish = (req, res, next) => {
         }
     })
     .then(savedDish => {
-        res.status(201).json({
-        message: "Dish " + (existingDish ? "updated" : "added") + " successfully",
-        dishId: savedDish._id
-        });
+        if(!existingDish) {
+            return res.status(201).json({
+                message: "Dish added successfully",
+                dishId: savedDish._id
+            });
+        }else{
+            return DietDB.find({'dietDays.dayDishes.dishId': existingDish._id})
+        }
+
+    })
+    .then(ret => {
+        console.log(ret)
     })
     .catch(err => {
-        console.log(err)
-        res.status(500).json({
-        message: "Error adding/updating dish"
-        });
+        if(err.code === 11000)
+        {
+            return res.status(500).json({
+                message: "There is already dish with this name"
+            });
+        } else {
+            res.status(500).json({
+                message: "Error adding/updating dish"
+            });
+        }
     });
 }
 

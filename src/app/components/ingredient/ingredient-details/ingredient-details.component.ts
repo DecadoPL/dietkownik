@@ -35,12 +35,12 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
   ngOnInit(){
 
     this.ingredientForm = this.fb.group({
-      _id: undefined,
-      ingrName: [undefined, Validators.required],
+      _id: null,
+      ingrName: [null, Validators.required],
       ingrProteins: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
       ingrCarbohydrates: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
       ingrFat: [0, [Validators.required, Validators.min(0), Validators.max(1000)]],
-      ingrKcal: 0,//{value: 0, disabled: true},
+      ingrKcal: 0,
       newPortion: this.fb.group({
         nameId: [],
         name: [],
@@ -53,7 +53,7 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
       (portionNames) => {
         this.$portionNames = portionNames;
         if(this.newIngredientFlag === true){
-          this.ingrPortions.push(this.newPortion(new PortionMONGO(undefined, this.$portionNames[0]._id, this.$portionNames[0].portionName, 100)));
+          this.ingrPortions.push(this.newPortion(new PortionMONGO(null, this.$portionNames[0]._id, this.$portionNames[0].portionName, 100)));
           this.requireSave = false;
         }
         this.$portionNames.splice(0,1);//po dodaniu 100g do składnika usuwamy z listy aby nie można było dodać więcej 100g bo to bez sensu.
@@ -109,7 +109,7 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
   newPortionEnter(){
     let newPortion = this.ingredientForm.get('newPortion')?.value;
     let portionNameId = this.$portionNames.find(x => x.portionName == newPortion.name)!._id;
-    this.ingrPortions.push(this.newPortion(new PortionMONGO(undefined, portionNameId!, newPortion.name, newPortion.weight)));
+    this.ingrPortions.push(this.newPortion(new PortionMONGO(null, portionNameId!, newPortion.name, newPortion.weight)));
     this.ingrPortions.controls.forEach((control ,index)=> {
       control.get('weight')?.valueChanges.subscribe(value => {
         if(value==""){
@@ -117,6 +117,12 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
         }
       });
     });
+
+    this.ingredientForm.get('newPortion')?.patchValue({
+      nameId: null,
+      name: null,
+      weight: null
+    })
   }
 
   subscriptions(){
@@ -184,12 +190,38 @@ export class IngredientDetailsComponent implements OnInit, IDeactivateComponent{
 
   onSubmit(){
     if(this.isFormValid){
-      this.ingredientForm.removeControl('newPortion');
       this.ingredientService.saveIngredientMONGO(this.ingredientForm.value)
         .subscribe( {
           next: (response) => {
             this.toastrService.success(response.message, 'SUCCESS');
-            this.ingredientForm.reset();
+
+            this.route.params.subscribe(
+              (params: Params) => {
+                if(params['id'] === undefined){
+                  this.ingredientForm.patchValue({
+                    _id: null,
+                    ingrName: null,
+                    ingrProteins: 0,
+                    ingrCarbohydrates: 0,
+                    ingrFat: 0,
+                    ingrKcal: 0,
+                  })
+      
+                  this.ingredientForm.get('newPortion')?.patchValue({
+                    nameId: null,
+                    name: null,
+                    weight: null
+                  })
+      
+                  for (let i = 0; i < this.ingrPortions.length; i++) {
+                    const control = this.ingrPortions.controls.at(i)
+                    if(control?.value.ingrPortionName === "100g"){
+                    }else{
+                      this.ingrPortions.removeAt(i)
+                    }
+                  }
+                }
+            })
             this.requireSave = false;
           },
           error: (error) => {

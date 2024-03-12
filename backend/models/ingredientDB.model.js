@@ -9,7 +9,7 @@ const ingredientPortionSchema = mongoose.Schema({
 
 const ingredientSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    ingrName: {type: String, required: true },
+    ingrName: {type: String, required: true, unique: true},
     ingrProteins: {type: Number, required: true},
     ingrCarbohydrates: {type: Number, required: true},
     ingrFat: {type: Number, required: true},

@@ -1,11 +1,11 @@
 export class PortionMONGO{
-  public _id: string | undefined;
+  public _id: string | null;
   public ingrPortionNameId: string;
   public ingrPortionName: string;
   public ingrPortionWeight: number;
 
   constructor( 
-    _id: string | undefined,
+    _id: string | null,
     ingrPortionNameId: string,
     ingrPortionName: string,
     ingrPortionWeight: number,

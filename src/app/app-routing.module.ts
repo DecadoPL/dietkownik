@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'sharedManagement', component: SharedManagementComponent},
 
   { path: 'dishes', component: DishListComponent},
+  { path: 'dishes/new', component: DishDetailsComponent, canDeactivate: [CanDeactivateGuardService]},
   { path: 'dishes/:id', component: DishDetailsComponent, canDeactivate: [CanDeactivateGuardService]},
 
   { path: 'diets', component: DietListComponent},
