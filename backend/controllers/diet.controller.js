@@ -84,3 +84,25 @@ exports.deleteDietById = (req, res, next) => {
         res.status(500).json({ error: "Internal server error" });
     });
 }
+
+exports.copyDietById = (req, res, next) => {
+    DietDB.findOne({_id: req.params.id})
+    .then(diet => {
+        const copy = new DietDB({
+            _id: null,
+            dietName: diet.dietName,
+            dietDescription: diet.dietDescription,
+            dietRequirements: diet.dietRequirements,
+            dietDays: diet.dietDays
+        })
+        copy.save().then(() => {
+            res.status(201).json({
+                message: "Diet copied successfully",
+            });
+        })
+
+    }).catch(error => {
+        res.status(500).json({ error: "Internal server error" });
+    });
+
+}

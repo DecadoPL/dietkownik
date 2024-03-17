@@ -34,6 +34,7 @@ exports.getIngredientsWithStringInName = (req,res,next) => {
 };
 
 exports.saveIngredient = (req, res, next) => {
+
     const ingredientData = {
         _id: req.body._id,
         ingrName: req.body.ingrName,
@@ -51,7 +52,6 @@ exports.saveIngredient = (req, res, next) => {
     }
 
     let existingIngredient;
-    let dishesToUpdate = [];
 
     IngredientDB.findOne({ _id: ingredientData._id })
     .then(ingr => {
@@ -80,16 +80,21 @@ exports.saveIngredient = (req, res, next) => {
     })
     .then(ret => {
         if (ret.statusCode === undefined) {
-            dishesToUpdate = ret;
-            const dishUpdatePromises = dishesToUpdate.map(dish => {
+            ret.map(dish => {
+                
                 dish.dishIngredients.forEach(ingredient => {
                     if (ingredient.ingrId.equals(existingIngredient._id)) {
                         ingredient.ingrName = ingredientData.ingrName;
-                        ingredient.ingrProteins = ingredientData.ingrProteins;
-                        ingredient.ingrCarbohydrates = ingredientData.ingrCarbohydrates;
-                        ingredient.ingrFat = ingredientData.ingrFat;
-                        ingredient.ingrKcal = ingredientData.ingrKcal;
                         ingredient.ingrPortions = ingredientData.ingrPortions;
+                        ingredient.ingrPortions.forEach(portion => {
+                            if(portion._id.equals(ingredient.dishIngrPortion._id)){
+                                ingredient.dishIngrPortion = portion
+                            }
+                        })
+                        ingredient.ingrProteins = (ingredientData.ingrProteins *  ingredient.dishIngrPortion.ingrPortionWeight/100).toFixed(2);
+                        ingredient.ingrCarbohydrates = (ingredientData.ingrCarbohydrates *  ingredient.dishIngrPortion.ingrPortionWeight/100).toFixed(2);
+                        ingredient.ingrFat = (ingredientData.ingrFat *  ingredient.dishIngrPortion.ingrPortionWeight/100).toFixed(2);
+                        ingredient.ingrKcal = (ingredientData.ingrKcal *  ingredient.dishIngrPortion.ingrPortionWeight/100).toFixed(2);
                     }
                 });
                 dish.save();

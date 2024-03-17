@@ -11,17 +11,17 @@ let config;
 
 try {
   config = require('./config.js');
-  devDatabaseUrl = config.database.dev_connectionString;
-  prodDatabaseUrl = config.database.prod_connectionString;
+//devDatabaseUrl = config.database.dev_connectionString;
+//prodDatabaseUrl = config.database.prod_connectionString;
 } catch (error) {
-  // Handle the case when the file doesn't exist
+
   console.error('Error loading config file:', error.message);
   config = {
     database: {
         prod_connectionString: 'nope',
         dev_connectionString: 'nope',
       },
-  }; // Provide a default or empty configuration
+  };
 }
 
 let env = process.env.NODE_ENV

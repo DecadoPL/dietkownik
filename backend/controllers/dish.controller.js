@@ -23,7 +23,7 @@ exports.saveDish = (req, res, next) => {
     }
 
     let existingDish;
-    let dietsToUpdate = [];
+
     DishDB.findOne({_id: dishData._id})
     .then(dish => {
         existingDish = dish;
@@ -50,10 +50,32 @@ exports.saveDish = (req, res, next) => {
         }else{
             return DietDB.find({'dietDays.dayDishes.dishId': existingDish._id})
         }
-
     })
-    .then(ret => {
-        console.log(ret)
+    .then(ret => { 
+        ret.forEach(diet => {
+            diet.dietDays.forEach(dietDay => {
+                dietDay.dayDishes.forEach(dish => {
+                    if(dish){
+                        if(dish.dishId.equals(dishData._id)){
+                            dish.dishName = dishData.dishName;
+                            dish.dishPortions = dishData.dishPortions;
+                            dish.dietDishProteins = (dishData.dishProteinsPerPortion*dish.dietDishQuantity).toFixed(1);
+                            dish.dietDishCarbohydrates = (dishData.dishCarbohydratesPerPortion*dish.dietDishQuantity).toFixed(1);
+                            dish.dietDishFat = (dishData.dishFatPerPortion*dish.dietDishQuantity).toFixed(1);
+                            dish.dietDishKcal = (dishData.dishKcalPerPortion*dish.dietDishQuantity).toFixed(1);
+                        } 
+                    }
+                })
+            })
+            diet.save();
+        })
+
+        if (ret.statusCode === undefined){
+            res.status(201).json({
+                message: "Dish updated successfully",
+            });
+        }
+
     })
     .catch(err => {
         if(err.code === 11000)
@@ -62,6 +84,7 @@ exports.saveDish = (req, res, next) => {
                 message: "There is already dish with this name"
             });
         } else {
+            console.log(err)
             res.status(500).json({
                 message: "Error adding/updating dish"
             });

@@ -28,6 +28,7 @@ router.post('/api/diets', dietController.saveDiet);
 router.get('/api/diets', dietController.getAllDietsNames);
 router.get('/api/diets/:id', dietController.getDietById);
 router.delete('/api/diets/delete/:id', dietController.deleteDietById);
+router.get('/api/diets/copy/:id', dietController.copyDietById);
 
 router.post('/api/dietRequirements', dietRequirementsController.saveDietRequirements);
 router.get('/api/dietRequirements', dietRequirementsController.getAllDietRequirementsNames);

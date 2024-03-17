@@ -70,7 +70,19 @@ export class DietListComponent implements OnInit{
   }
 
   copyItem(id: string){
-    // this.router.navigate(['diets/copy/'+id]);
+    this.dietService.copyDietMONGO(id).subscribe({
+      next: (response) => {
+        this.toastrService.success(response.message, 'SUCCESS');
+        this.alert=false;
+        this.loadDietsList();
+      },
+      error: (error) => {
+        let errMessage = error.toString()
+        this.toastrService.error(errMessage.replace("Error: ", ""), "ERROR");
+        this.alert=false;
+        this.loadDietsList();
+      }
+    });
   }
 
 }
