@@ -52,28 +52,30 @@ exports.saveDish = (req, res, next) => {
         }
     })
     .then(ret => { 
-        ret.forEach(diet => {
-            diet.dietDays.forEach(dietDay => {
-                dietDay.dayDishes.forEach(dish => {
-                    if(dish){
-                        if(dish.dishId.equals(dishData._id)){
-                            dish.dishName = dishData.dishName;
-                            dish.dishPortions = dishData.dishPortions;
-                            dish.dietDishProteins = (dishData.dishProteinsPerPortion*dish.dietDishQuantity).toFixed(1);
-                            dish.dietDishCarbohydrates = (dishData.dishCarbohydratesPerPortion*dish.dietDishQuantity).toFixed(1);
-                            dish.dietDishFat = (dishData.dishFatPerPortion*dish.dietDishQuantity).toFixed(1);
-                            dish.dietDishKcal = (dishData.dishKcalPerPortion*dish.dietDishQuantity).toFixed(1);
-                        } 
-                    }
+        if(ret != undefined && Array.isArray(ret)){
+            ret.forEach(diet => {
+                diet.dietDays.forEach(dietDay => {
+                    dietDay.dayDishes.forEach(dish => {
+                        if(dish){
+                            if(dish.dishId.equals(dishData._id)){
+                                dish.dishName = dishData.dishName;
+                                dish.dishPortions = dishData.dishPortions;
+                                dish.dietDishProteins = (dishData.dishProteinsPerPortion*dish.dietDishQuantity).toFixed(1);
+                                dish.dietDishCarbohydrates = (dishData.dishCarbohydratesPerPortion*dish.dietDishQuantity).toFixed(1);
+                                dish.dietDishFat = (dishData.dishFatPerPortion*dish.dietDishQuantity).toFixed(1);
+                                dish.dietDishKcal = (dishData.dishKcalPerPortion*dish.dietDishQuantity).toFixed(1);
+                            } 
+                        }
+                    })
                 })
+                diet.save();
             })
-            diet.save();
-        })
 
-        if (ret.statusCode === undefined){
-            res.status(201).json({
-                message: "Dish updated successfully",
-            });
+            if (ret.statusCode === undefined){
+                res.status(201).json({
+                    message: "Dish updated successfully",
+                });
+            }
         }
 
     })
