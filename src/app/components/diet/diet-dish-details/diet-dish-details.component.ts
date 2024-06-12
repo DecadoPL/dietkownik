@@ -17,11 +17,9 @@ export class DietDishDetailsComponent implements OnInit{
   constructor(private dishService: DishService){}
 
   ngOnInit(): void {
-    console.log(this.dietDish)
     this.dishService.getDishMONGO(this.dietDish.dishId!).subscribe(
       (dishFetched) => {
         this.dish = dishFetched;
-        console.log("this.dish", this.dish)
       })
   }
 

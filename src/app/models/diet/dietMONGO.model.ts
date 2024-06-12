@@ -7,6 +7,7 @@ export class DietMONGO{
   dietDescription: string;
   dietRequirements: DietRequirementsMONGO;
   dietDays: DietDayMONGO[];
+  dietInUse: boolean;
 
   
   constructor(
@@ -14,13 +15,15 @@ export class DietMONGO{
     dietName: string,
     dietDescription: string,
     dietRequirements: DietRequirementsMONGO,
-    dietDays: DietDayMONGO[]
+    dietDays: DietDayMONGO[],
+    dietInUse: boolean
   ){
     this._id = _id;
     this.dietName = dietName;
     this.dietDescription = dietDescription;
     this.dietRequirements = dietRequirements;
     this.dietDays = dietDays;
+    this.dietInUse = dietInUse;
 
   }
 }

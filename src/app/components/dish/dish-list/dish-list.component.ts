@@ -68,4 +68,20 @@ export class DishListComponent implements OnInit{
       this.dishesToDisplay = this.$dishes;
     }
   }
+
+  copyItem(id: string){
+    this.dishService.copyDishMONGO(id).subscribe({
+      next: (response) => {
+        this.toastrService.success(response.message, 'SUCCESS');
+        this.alert=false;
+        this.loadDishesList();
+      },
+      error: (error) => {
+        let errMessage = error.toString()
+        this.toastrService.error(errMessage.replace("Error: ", ""), "ERROR");
+        this.alert=false;
+        this.loadDishesList();
+      }
+    });
+  }
 }

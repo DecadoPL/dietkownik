@@ -23,6 +23,7 @@ router.get('/api/dishes', dishController.getAllDishNames);
 router.get('/api/dishes/:id', dishController.getDishById);
 router.get('/api/dishes/search/:str', dishController.getDishesWithStringInName);
 router.delete('/api/dishes/delete/:id',dishController.deleteDishById);
+router.get('/api/dishes/copy/:id', dishController.copyDishById);
 
 router.post('/api/diets', dietController.saveDiet);
 router.get('/api/diets', dietController.getAllDietsNames);

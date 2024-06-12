@@ -154,12 +154,17 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
         })
         this.dietForm.get('dietRequirements')?.patchValue(newDietRequirements.value, { emitEvent: false });
         //ten kawałek kodu dodaje puste kontrolki do formularza po to, żeby adddish dodawało dania w konkretne sloty. 
-        this.dietDays.controls.forEach((dietDay) => {    
+        
+        this.dietDays.controls.forEach((dietDay) => {   
           for(let i = 0; i< mealTimes.length; i++){
             const dayDishes = dietDay.get('dayDishes') as FormArray;
-            dayDishes.push(this.fb.control(undefined))
+            if(dayDishes.length != mealTimes.length){
+              dayDishes.push(this.fb.control(undefined))
+            }
+            
           }
         })
+
       })
     }
   }
@@ -178,7 +183,8 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
         dietRequirementsKcal: [undefined, [Validators.required]],
         dietRequirementsMealsTime: this.fb.array([]),
       }),
-      dietDays: this.fb.array([])
+      dietDays: this.fb.array([]),
+      dietInUse: [undefined]
     })
 
     this.dietRequirementsService.getDietRequirementsListMONGO().subscribe(
@@ -198,14 +204,15 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
             if(params['dietId']!=undefined){
               this.dietService.getDietMONGO(params['dietId']).subscribe(
                 (dietFetched: DietMONGO) => {
-                  // console.log("dietFetched", dietFetched)
+
                   this.dietForm.patchValue({
                     _id: dietFetched._id,
                     dietName: dietFetched.dietName,
                     dietDescription: dietFetched.dietDescription,
-                    dietRequirements: dietFetched.dietRequirements
+                    dietRequirements: dietFetched.dietRequirements,
+                    dietInUse: dietFetched.dietInUse
                   })
-                  // console.log("dietFetched", dietFetched)
+
                   dietFetched.dietDays.forEach((dietDay:DietDayMONGO) => {
                     this.addDietDay(dietDay)
                   })
@@ -255,6 +262,14 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
         this.updateDailyMacro();
       }
     }
+  }
+
+  toggleDietInUse(){
+    this.dietForm.patchValue({
+      dietInUse: !this.dietForm.get('dietInUse')?.value
+    })
+    // console.log(this.dietForm.value);
+    // console.log('Diet in use:', this.dietInUse);  // Log the value to the console for verification
   }
 
   dateSelected() {
@@ -337,9 +352,8 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
   alertDiscard(){}
 
   onSubmit(){
-
+    console.log(this.dietForm.value)
     if(this.isFormValid == true){
-      // console.log("onSubmit dietForm.value", this.dietForm.value);
       this.dietService.saveDietMONGO(this.dietForm.value)
       .subscribe( {
         next: (response) => {
@@ -446,7 +460,6 @@ export class DietDetailsComponent implements OnInit, IDeactivateComponent{
     dishes.setControl(dishData[0],this.fb.control(undefined)); 
     this.updateDailyMacro();
 
-    console.log("dishId", dish)
     const unusedDishIndex = this.unusedDishes.findIndex((unusedDish) => unusedDish.dish._id === dish.dishId)
     if(unusedDishIndex === -1){
       if(dish.dishPortions != 1){

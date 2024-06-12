@@ -23,6 +23,7 @@
         ></app-diet-list-item></td>
       <td><button class="delete-button" (click)="deleteItem(diet._id)">delete</button></td>
       <td><button class="button" (click)="copyItem(diet._id)">Copy</button></td>
+      <td><button class="save-button button" *ngIf="diet.dietInUse">Diet in use</button></td>
     </tr>
   </table>
 

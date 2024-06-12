@@ -7,9 +7,9 @@ exports.saveDiet = (req, res, next) => {
         dietName: req.body.dietName,
         dietDescription: req.body.dietDescription,
         dietRequirements: req.body.dietRequirements,
-        dietDays: req.body.dietDays
+        dietDays: req.body.dietDays,
+        dietInUse: req.body.dietInUse
     }
-
     for (let i=0; i < dietData.dietDays.length; i++) {
         if(dietData.dietDays[i]._id == null){
             dietData.dietDays[i]._id = new mongoose.Types.ObjectId();
@@ -33,6 +33,7 @@ exports.saveDiet = (req, res, next) => {
             diet.dietDescription = dietData.dietDescription
             diet.dietRequirements = dietData.dietRequirements
             diet.dietDays = dietData.dietDays || []
+            diet.dietInUse = dietData.dietInUse || false
             return diet.save();
         } else {
             return new DietDB(dietData).save();
@@ -52,7 +53,7 @@ exports.saveDiet = (req, res, next) => {
 }
 
 exports.getAllDietsNames = (req, res, next) => {
-    DietDB.find({},{_id:1, dietName:1})
+    DietDB.find({},{_id:1, dietName:1, dietInUse:1})
     .then(result => {
         res.status(200).json({
             message: "Diets fetched successfully!",
@@ -93,7 +94,8 @@ exports.copyDietById = (req, res, next) => {
             dietName: diet.dietName,
             dietDescription: diet.dietDescription,
             dietRequirements: diet.dietRequirements,
-            dietDays: diet.dietDays
+            dietDays: diet.dietDays,
+            dietInUse: diet.dietInUse
         })
         copy.save().then(() => {
             res.status(201).json({

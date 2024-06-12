@@ -52,7 +52,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
         if(params['id']!=undefined && params['id']!='new'){
           this.dishService.getDishMONGO(params['id']).subscribe(
             (dishFetched: DishMONGO) => {
-              console.log("dishFetched", dishFetched.dishIngredients)
 
               this.dishForm.patchValue({
                 _id: dishFetched._id,
@@ -141,7 +140,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
   );
 
   calculateDishMacro(){ 
-    console.log("calculateDishMacro")
     const precision = 2;
     this.dishForm.patchValue({
       dishProteinsPerPortion: '',
@@ -255,7 +253,6 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
   }
 
   changeSelectedPortion(ingrIndex: number, event: any){
-    console.log("changeSelectedPortion")
     
     const selectedPortionIndex = event.target.selectedIndex;
     let ingrEdited = this.dishIngredients.at(ingrIndex);
@@ -268,8 +265,7 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
   }
 
   calculateDishIngrMacroAfterPortionChange(ingrEdited: any, previousPortionWeight: number){
-    console.log("calculateDishIngrMacroAfterPortionChange")
-    console.log("previousPortionWeight", previousPortionWeight)
+
     const precision = 6;
     const ingrPortionWeight = +ingrEdited.get('dishIngrPortion').value.ingrPortionWeight;
     let proteins = +ingrEdited.get('ingrProteins').value;
@@ -315,7 +311,7 @@ export class DishDetailsComponent implements OnInit, IDeactivateComponent{
   }
 
   newIngredient(ingr: DishIngredientMONGO): FormGroup {
-    console.log("ingrId", ingr.ingrId)
+
     const newIngr = this.fb.group({
       _id: ingr._id || undefined,
       dishIngrPortion: this.fb.group({

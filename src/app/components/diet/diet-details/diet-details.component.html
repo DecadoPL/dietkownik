@@ -34,7 +34,8 @@
   <button type="submit" class="form__button button" [disabled]="!requireSave" [hidden]="!requireSave">Save</button>
 
 </form>
-
+<button class="save-button button" *ngIf="dietForm.get('dietInUse')?.value" (click)="toggleDietInUse()" >Diet in use</button>
+<button class="delete-button button" *ngIf="!dietForm.get('dietInUse')?.value" (click)="toggleDietInUse()" >Diet not in use</button>
 <hr>
 
 <div class="days" cdkDropListGroup>

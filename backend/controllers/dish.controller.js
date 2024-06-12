@@ -137,3 +137,29 @@ exports.deleteDishById = (req, res, next) => {
         res.status(500).json({ error: "Internal server error" });
     });
 }
+
+exports.copyDishById = (req, res, next) => {
+    DishDB.findOne({_id: req.params.id})
+    .then(dish => {
+        const copy = new DishDB({
+            _id: null,
+            dishName: dish.dishName+'-copy',
+            dishRecipe:dish.dishRecipe,
+            dishPortions:dish.dishPortions,
+            dishProteinsPerPortion:dish.dishProteinsPerPortion,
+            dishCarbohydratesPerPortion:dish.dishCarbohydratesPerPortion,
+            dishFatPerPortion:dish.dishFatPerPortion,
+            dishKcalPerPortion:dish.dishKcalPerPortion,
+            dishIngredients:dish.dishIngredients,
+        })
+        copy.save().then(() => {
+            res.status(201).json({
+                message: "Dish copied successfully",
+            });
+        })
+
+    }).catch(error => {
+        res.status(500).json({ error: "Internal server error" });
+    });
+
+}

@@ -36,6 +36,7 @@ const dietSchema = mongoose.Schema({
     dietDescription: {type: String, required: true},
     dietRequirements: {type: dietRequirementsSchema, required: true},
     dietDays: {type: [dietDaySchema], required: true},
+    dietInUse: {type: Boolean, required: true},
 });
 
 module.exports = mongoose.model('Diet', dietSchema);

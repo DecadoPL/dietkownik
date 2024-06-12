@@ -53,7 +53,7 @@ export class ShoppingListListComponent {
   loadShoppingListsList(){
     this.shoppingListService.getShoppingListListMONGO()
     .subscribe((shoppingList: ShoppingListListItemMONGO[]) => {
-        console.log("shoppingList", shoppingList)
+
         this.$shoppingLists = shoppingList.sort((a,b) => {
           return a.shoppingListName.localeCompare(b.shoppingListName);
         });

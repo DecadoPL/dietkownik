@@ -105,7 +105,7 @@ export class DietRequirementsDetailsComponent implements OnInit {
         this.dietRequirementsMealsTime.at(index).setValue(value);
         this.requireSave = true;
       } else {
-        console.log("Input is invalid")
+
       }
     }else{
       this.dietRequirementsMealsTime.removeAt(index);
@@ -189,9 +189,9 @@ export class DietRequirementsDetailsComponent implements OnInit {
 
 
   onSubmit(event: any){
-    console.log("onSubmit this.dietRequirementsForm.value", this.dietRequirementsForm.value)
+
     if(this.isFormValid == true){
-      console.log("onSubmit dishForm.value", this.dietRequirementsForm.value);
+
       this.dietRequirementsService.saveDietRequirementsMONGO(this.dietRequirementsForm.value)
       .subscribe( {
         next: (response) => {

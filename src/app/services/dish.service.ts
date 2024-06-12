@@ -67,4 +67,16 @@ export class DishService{
       )
   }
  
+  copyDishMONGO(id: string): Observable<{message: string}>{
+    const url = `${this.urlMONGO}copy/${id}`;
+    return this.http.get<{message: string}>(url)
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          throw new Error(error.error.message)
+        })
+      )
+  }
 }
